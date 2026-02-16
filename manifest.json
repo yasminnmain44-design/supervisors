@@ -2,7 +2,7 @@
   "name": "تطبيق المسؤولين - نظام الحضور",
   "short_name": "المسؤولين",
   "description": "نظام متكامل لإدارة الحضور والغياب والإجازات والأعطال للمسؤولين",
-  "start_url": "/",
+  "start_url": "https://yasminnmain44-design.github.io/supervisors/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#4361ee",
