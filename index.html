@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تطبيق المسؤولين - نظام الحضور</title>
+    
+    <!-- إعدادات PWA للتثبيت على الشاشة الرئيسية -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="المسؤولين">
+    <meta name="theme-color" content="#4361ee">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <!-- رسالة تثبيت التطبيق -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-header">
+            <div class="install-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="install-text">
+                <h3>تثبيت التطبيق</h3>
+                <p>قم بتثبيت التطبيق على شاشتك الرئيسية للوصول السريع</p>
+            </div>
+        </div>
+        <div class="install-buttons">
+            <button class="install-btn primary" id="installApp">تثبيت</button>
+            <button class="install-btn secondary" id="closeInstall">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-header">
+            <i class="fas fa-user-shield"></i>
+            <h1>مرحباً بك</h1>
+            <p>تطبيق المسؤولين - نظام الحضور</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> اسم المسؤول</label>
+                <select id="supervisorName" required>
+                    <option value="">اختر اسمك من القائمة</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> كلمة السر</label>
+                <input type="password" id="supervisorPassword" required placeholder="أدخل كلمة السر الخاصة بك">
+            </div>
+            
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="rememberMe" style="width: auto; margin-left: 10px;" checked>
+                <label for="rememberMe" style="display: inline; margin: 0;">تذكرني (البقاء متصلاً)</label>
+            </div>
+            
+            <button type="submit" id="loginButton">
+                <span id="loginBtnText">تسجيل الدخول</span>
+            </button>
+        </form>
+        
+        <div class="error-message" id="loginError">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">اسم المسؤول أو كلمة السر غير صحيحة</span>
+        </div>
+    </div>
+
+    <!-- التطبيق الرئيسي -->
+    <div class="app-container" id="appContainer">
+        <!-- الهيدر -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="app-title" id="pageTitle">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="currentUserDisplay">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="currentUserName"></span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" title="تسجيل الخروج">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- حالة الاتصال -->
+        <div class="connection-status" id="connectionStatus">
+            <i class="fas fa-wifi"></i> متصل بقاعدة البيانات
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content" id="mainContent">
+            <!-- سيتم تغيير المحتوى ديناميكياً -->
+        </main>
+
+        <!-- شريط التنقل السفلي -->
+        <nav class="bottom-nav" id="bottomNav">
+            <div class="nav-item active" data-page="dashboard">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div class="nav-text">الرئيسية</div>
+            </div>
+            <div class="nav-item" data-page="attendance">
+                <div class="nav-icon"><i class="fas fa-user-check"></i></div>
+                <div class="nav-text">الحضور</div>
+            </div>
+            <div class="nav-item" data-page="leaves">
+                <div class="nav-icon"><i class="fas fa-umbrella-beach"></i></div>
+                <div class="nav-text">الإجازات</div>
+            </div>
+            <div class="nav-item" data-page="faults">
+                <div class="nav-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="nav-text">الأعطال</div>
+            </div>
+            <div class="nav-item" data-page="financial">
+                <div class="nav-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="nav-text">المالية</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
