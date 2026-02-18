@@ -3,19 +3,963 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>تطبيق المسؤولين - نظام الحضور</title>
+    <title>تطبيق المسؤولين - نظام الحضور المتكامل</title>
     
-    <!-- إعدادات PWA للتثبيت على الشاشة الرئيسية -->
-    <link rel="manifest" href="manifest.json">
+    <!-- إعدادات PWA للتثبيت -->
+    <link rel="manifest" href="data:application/manifest+json,{
+        &quot;name&quot;: &quot;تطبيق المسؤولين - نظام الحضور&quot;,
+        &quot;short_name&quot;: &quot;المسؤولين&quot;,
+        &quot;description&quot;: &quot;نظام متكامل لإدارة الحضور والغياب والإجازات والأعطال والعهدة&quot;,
+        &quot;start_url&quot;: &quot;https://yasminnmain44-design.github.io/supervisors/&quot;,
+        &quot;display&quot;: &quot;standalone&quot;,
+        &quot;orientation&quot;: &quot;portrait&quot;,
+        &quot;background_color&quot;: &quot;#4361ee&quot;,
+        &quot;theme_color&quot;: &quot;#4361ee&quot;,
+        &quot;dir&quot;: &quot;rtl&quot;,
+        &quot;lang&quot;: &quot;ar&quot;,
+        &quot;icons&quot;: [
+            {
+                &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234361ee'/%3E%3Cpath d='M50 20 L70 40 L50 60 L30 40 L50 20' fill='white' opacity='0.9'/%3E%3Ccircle cx='50' cy='55' r='15' fill='white' opacity='0.9'/%3E%3Ctext x='50' y='68' font-size='30' text-anchor='middle' fill='%234361ee' font-weight='bold' font-family='Arial'%3E👤%3C/text%3E%3C/svg%3E&quot;,
+                &quot;sizes&quot;: &quot;192x192&quot;,
+                &quot;type&quot;: &quot;image/svg+xml&quot;,
+                &quot;purpose&quot;: &quot;any maskable&quot;
+            },
+            {
+                &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234361ee'/%3E%3Cpath d='M50 20 L70 40 L50 60 L30 40 L50 20' fill='white' opacity='0.9'/%3E%3Ccircle cx='50' cy='55' r='15' fill='white' opacity='0.9'/%3E%3Ctext x='50' y='68' font-size='30' text-anchor='middle' fill='%234361ee' font-weight='bold' font-family='Arial'%3E👤%3C/text%3E%3C/svg%3E&quot;,
+                &quot;sizes&quot;: &quot;512x512&quot;,
+                &quot;type&quot;: &quot;image/svg+xml&quot;,
+                &quot;purpose&quot;: &quot;any maskable&quot;
+            }
+        ]
+    }">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="المسؤولين">
     <meta name="theme-color" content="#4361ee">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #2c3e50;
+            --success: #06d6a0;
+            --success-dark: #05b586;
+            --warning: #ffb703;
+            --warning-dark: #faa300;
+            --danger: #ef476f;
+            --danger-dark: #d63e62;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --whatsapp: #25D366;
+            --whatsapp-dark: #128C7E;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+            --cash: #f1c40f;
+            --cash-dark: #f39c12;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            direction: rtl;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* رسالة تثبيت التطبيق */
+        .install-prompt {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 15px;
+            right: 15px;
+            z-index: 1001;
+            border: 1px solid var(--primary);
+            animation: slideUp 0.3s ease;
+        }
+
+        .install-prompt.show {
+            display: block;
+        }
+
+        .install-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .install-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .install-text h3 {
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .install-text p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .install-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .install-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .install-btn.secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .install-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .install-btn.secondary:hover {
+            background: var(--gray-light);
+            transform: translateY(-2px);
+        }
+
+        /* شاشة تسجيل الدخول */
+        .login-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            margin: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header i {
+            font-size: 70px;
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            padding: 25px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .login-header h1 {
+            color: var(--secondary);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--gray-light);
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--light);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+            background: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+            box-shadow: 0 8px 15px rgba(6, 214, 160, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            box-shadow: 0 8px 15px rgba(255, 183, 3, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            box-shadow: 0 8px 15px rgba(239, 71, 111, 0.3);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, var(--whatsapp) 0%, var(--whatsapp-dark) 100%);
+            box-shadow: 0 8px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-cash {
+            background: linear-gradient(135deg, var(--cash) 0%, var(--cash-dark) 100%);
+            box-shadow: 0 8px 15px rgba(241, 196, 15, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--gray) 0%, #5a6268 100%);
+            box-shadow: 0 8px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .error-message {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            display: none;
+            border: 1px solid rgba(239, 71, 111, 0.3);
+        }
+
+        .error-message i {
+            margin-left: 8px;
+        }
+
+        /* التطبيق الرئيسي */
+        .app-container {
+            background: #f5f7fa;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            position: relative;
+            display: none;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        /* الهيدر */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px 20px 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.4);
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 18px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-name {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+        }
+
+        .user-name i {
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: rotate(90deg);
+            box-shadow: none;
+        }
+
+        /* شريط التنقل السفلي */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 5px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            max-width: 450px;
+            margin: 0 auto;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.75rem;
+            flex: 1;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(67, 97, 238, 0.05) 100%);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            padding: 20px 15px;
+            padding-bottom: 90px;
+            overflow-y: auto;
+            max-height: calc(100vh - 130px);
+        }
+
+        /* البطاقات */
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header i {
+            font-size: 1.2rem;
+            margin-left: 8px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* إحصائيات سريعة */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 18px 12px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* إحصائيات العهدة */
+        .cash-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cash-stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 10px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border: none;
+            border-top: 5px solid var(--cash);
+        }
+
+        .cash-stat-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--cash-dark);
+            line-height: 1.2;
+            margin: 5px 0;
+        }
+
+        .cash-stat-label {
+            color: var(--gray);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* تبويبات العهدة */
+        .cash-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--gray-light);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .cash-tab {
+            flex: 1;
+            padding: 12px 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .cash-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .cash-tab-content {
+            display: none;
+        }
+
+        .cash-tab-content.active {
+            display: block;
+        }
+
+        /* قائمة العناصر */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+            transition: all 0.3s;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: rgba(67, 97, 238, 0.02);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .item-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--gray);
+            padding: 40px 20px;
+            font-style: normal;
+            background: var(--light);
+            border-radius: 20px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-light);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* حالة الحضور */
+        .status-present {
+            color: var(--success);
+            font-weight: 700;
+            background: rgba(6, 214, 160, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .status-absent {
+            color: var(--danger);
+            font-weight: 700;
+            background: rgba(239, 71, 111, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .status-leave {
+            color: var(--warning);
+            font-weight: 700;
+            background: rgba(255, 183, 3, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .status-fixed {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .status-pending {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        /* حالة العهدة */
+        .cash-positive {
+            color: var(--success);
+            font-weight: 700;
+            background: rgba(6, 214, 160, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .cash-negative {
+            color: var(--danger);
+            font-weight: 700;
+            background: rgba(239, 71, 111, 0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        /* الفلاتر */
+        .filter-section {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            border: none;
+        }
+
+        .filter-section .form-group {
+            margin-bottom: 0;
+        }
+
+        /* شارة المحطة */
+        .station-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* شارة واتساب */
+        .whatsapp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            background: rgba(37, 211, 102, 0.1);
+            color: var(--whatsapp-dark);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .whatsapp-badge i {
+            color: var(--whatsapp);
+        }
+
+        /* حالة الاتصال */
+        .connection-status {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            color: white;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* مؤشر التحميل */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* رسائل التنبيه */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert i {
+            font-size: 1.2rem;
+        }
+
+        .alert-success {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(6, 214, 160, 0.3);
+        }
+
+        .alert-error {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 71, 111, 0.3);
+        }
+
+        .alert-warning {
+            background: rgba(255, 183, 3, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 183, 3, 0.3);
+        }
+
+        .alert-info {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.3);
+        }
+
+        /* تحسينات للأجهزة الصغيرة */
+        @media (max-width: 380px) {
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .cash-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-title {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+            
+            .user-name {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .nav-icon {
+                font-size: 1.2rem;
+            }
+            
+            .nav-item {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* رسالة الترحيب */
+        .welcome-message {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(67, 97, 238, 0.02) 100%);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .welcome-message h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .welcome-message p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* مؤشر التحميل الكبير */
+        .loading-large {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .loading-large .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--gray-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        /* صندوق البحث */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            padding-right: 45px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            background-size: 20px;
+        }
+
+        /* الفلاتر مع زر */
+        .filter-with-button {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .filter-with-button .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .filter-with-button button {
+            width: auto;
+            padding: 16px 20px;
+            height: 52px;
+            white-space: nowrap;
+        }
+
+        /* ملخص العهدة */
+        .cash-summary {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+
+        .cash-summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(241, 196, 15, 0.2);
+        }
+
+        .cash-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .cash-summary-label {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .cash-summary-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cash-dark);
+        }
+    </style>
 </head>
 <body>
     <!-- رسالة تثبيت التطبيق -->
@@ -40,7 +984,7 @@
         <div class="login-header">
             <i class="fas fa-user-shield"></i>
             <h1>مرحباً بك</h1>
-            <p>تطبيق المسؤولين - نظام الحضور</p>
+            <p>تطبيق المسؤولين - نظام الحضور والعهدة</p>
         </div>
         
         <form id="loginForm">
@@ -125,9 +1069,2010 @@
                 <div class="nav-icon"><i class="fas fa-hand-holding-usd"></i></div>
                 <div class="nav-text">المالية</div>
             </div>
+            <div class="nav-item" data-page="cash">
+                <div class="nav-icon"><i class="fas fa-wallet"></i></div>
+                <div class="nav-text">العهدة</div>
+            </div>
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // رقم المدير العام للصيانة (واتساب)
+        const MANAGER_PHONE = "201555153901"; // بدون + وبدون صفر في البداية للواتساب
+        const MANAGER_DISPLAY_PHONE = "+20 15 55153901";
+
+        // تهيئة Firebase بنفس إعدادات التطبيق الرئيسي
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjImFc52SF5TlN7k7vz0H6-8bWl8Pkz0k",
+            authDomain: "haat-a88ee.firebaseapp.com",
+            databaseURL: "https://haat-a88ee-default-rtdb.firebaseio.com",
+            projectId: "haat-a88ee",
+            storageBucket: "haat-a88ee.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // متغيرات التطبيق
+        let currentSupervisor = null;
+        let supervisors = [];
+        let employees = [];
+        let stations = [];
+        let attendance = [];
+        let leaves = [];
+        let faults = [];
+        let financials = [];
+        let cashTransactions = []; // بيانات العهدة
+        let isConnected = false;
+        let autoRefreshInterval = null;
+
+        // متغيرات PWA
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installAppBtn = document.getElementById('installApp');
+        const closeInstallBtn = document.getElementById('closeInstall');
+
+        // عناصر DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const appContainer = document.getElementById('appContainer');
+        const loginForm = document.getElementById('loginForm');
+        const supervisorSelect = document.getElementById('supervisorName');
+        const supervisorPassword = document.getElementById('supervisorPassword');
+        const loginError = document.getElementById('loginError');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginButton = document.getElementById('loginButton');
+        const currentUserName = document.getElementById('currentUserName');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const bottomNav = document.getElementById('bottomNav');
+        const mainContent = document.getElementById('mainContent');
+        const pageTitle = document.getElementById('pageTitle');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const rememberMeCheckbox = document.getElementById('rememberMe');
+
+        // ==================== كود PWA للتثبيت على الشاشة الرئيسية ====================
+
+        // التحقق مما إذا كان التطبيق مثبتاً بالفعل
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true ||
+                   document.referrer.includes('android-app://');
+        }
+
+        // إظهار رسالة التثبيت إذا كان التطبيق غير مثبت والمتصفح يدعم PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // إظهار رسالة التثبيت إذا لم يكن التطبيق مثبتاً
+            if (!isAppInstalled() && !localStorage.getItem('installPromptClosed')) {
+                setTimeout(() => {
+                    installPrompt.classList.add('show');
+                }, 3000);
+            }
+        });
+
+        // تثبيت التطبيق
+        installAppBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                showTemporaryMessage('التثبيت غير متاح حالياً', 'error');
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('تم تثبيت التطبيق');
+                installPrompt.classList.remove('show');
+                localStorage.setItem('appInstalled', 'true');
+                showTemporaryMessage('تم تثبيت التطبيق بنجاح على الشاشة الرئيسية', 'success');
+            }
+            
+            deferredPrompt = null;
+        });
+
+        // إغلاق رسالة التثبيت
+        closeInstallBtn.addEventListener('click', () => {
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
+        });
+
+        // إظهار رسالة التثبيت عند فتح التطبيق من المتصفح
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!isAppInstalled() && !localStorage.getItem('installPromptClosed') && !localStorage.getItem('appInstalled')) {
+                // انتظر 3 ثواني ثم أظهر الرسالة
+                setTimeout(() => {
+                    if (deferredPrompt) {
+                        installPrompt.classList.add('show');
+                    }
+                }, 3000);
+            }
+            
+            loadSupervisors();
+            checkSavedSession();
+            startAutoDateRefresh();
+        });
+
+        // بدء التحديث التلقائي للتاريخ
+        function startAutoDateRefresh() {
+            // التحقق كل دقيقة إذا كان التاريخ الحالي مختلف عن التاريخ المعروض
+            autoRefreshInterval = setInterval(() => {
+                if (appContainer.style.display === 'block' && currentSupervisor) {
+                    // تحديث التواريخ في الصفحات المفتوحة
+                    updateDatesInCurrentPage();
+                }
+            }, 60000); // كل دقيقة
+        }
+
+        // تحديث التواريخ في الصفحة الحالية
+        function updateDatesInCurrentPage() {
+            const today = getTodayDate();
+            
+            // تحديث حقل التاريخ في نموذج الحضور إذا كان موجوداً
+            const attendanceDate = document.getElementById('attendanceDate');
+            if (attendanceDate && attendanceDate.value !== today) {
+                attendanceDate.value = today;
+            }
+            
+            // تحديث حقل التاريخ في فلتر الحضور
+            const filterAttendanceDate = document.getElementById('filterAttendanceDate');
+            if (filterAttendanceDate && filterAttendanceDate.value !== today) {
+                filterAttendanceDate.value = today;
+            }
+            
+            // تحديث حقل التاريخ في نموذج الأعطال
+            const faultDate = document.getElementById('faultDate');
+            if (faultDate && faultDate.value !== today) {
+                faultDate.value = today;
+            }
+            
+            // تحديث حقل التاريخ في نموذج الإجازات
+            const leaveStart = document.getElementById('leaveStart');
+            if (leaveStart && leaveStart.value !== today) {
+                leaveStart.value = today;
+            }
+            
+            const leaveEnd = document.getElementById('leaveEnd');
+            if (leaveEnd && leaveEnd.value !== today) {
+                leaveEnd.value = today;
+            }
+            
+            // تحديث حقل التاريخ في نموذج الحركات المالية
+            const financialDate = document.getElementById('financialDate');
+            if (financialDate && financialDate.value !== today) {
+                financialDate.value = today;
+            }
+            
+            const filterFinancialDate = document.getElementById('filterFinancialDate');
+            if (filterFinancialDate && filterFinancialDate.value !== today) {
+                filterFinancialDate.value = today;
+            }
+            
+            // تحديث حقول التاريخ في صفحة العهدة
+            const cashDate = document.getElementById('cashDate');
+            if (cashDate && cashDate.value !== today) {
+                cashDate.value = today;
+            }
+            
+            const filterCashDate = document.getElementById('filterCashDate');
+            if (filterCashDate && filterCashDate.value !== today) {
+                filterCashDate.value = today;
+            }
+        }
+
+        // الحصول على تاريخ اليوم بصيغة YYYY-MM-DD
+        function getTodayDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // التحقق من وجود جلسة سابقة
+        function checkSavedSession() {
+            const savedSession = localStorage.getItem('attendance_supervisor_session');
+            
+            if (savedSession) {
+                try {
+                    const sessionData = JSON.parse(savedSession);
+                    
+                    // التحقق من أن الجلسة لم تنته (صلاحية غير محدودة)
+                    if (sessionData.supervisorId && sessionData.supervisorName) {
+                        // عرض شاشة التحميل
+                        showLoading(true);
+                        
+                        // تحميل المسؤولين أولاً
+                        database.ref('supervisors').once('value')
+                            .then((snapshot) => {
+                                const data = snapshot.val();
+                                if (data) {
+                                    supervisors = Object.keys(data).map(key => {
+                                        return { id: key, ...data[key] };
+                                    });
+                                    
+                                    const supervisor = supervisors.find(s => s.id === sessionData.supervisorId);
+                                    
+                                    if (supervisor && supervisor.active) {
+                                        // استعادة الجلسة
+                                        currentSupervisor = supervisor;
+                                        currentUserName.textContent = supervisor.employeeName;
+                                        
+                                        // إخفاء شاشة الدخول وإظهار التطبيق
+                                        loginScreen.style.display = 'none';
+                                        appContainer.style.display = 'block';
+                                        
+                                        // تحميل البيانات
+                                        loadAllData();
+                                        
+                                        // إظهار رسالة ترحيب
+                                        showTemporaryMessage(`مرحباً بعودتك ${supervisor.employeeName}`, 'success');
+                                    } else {
+                                        // المسؤول غير موجود أو غير نشط
+                                        localStorage.removeItem('attendance_supervisor_session');
+                                        showLoading(false);
+                                    }
+                                } else {
+                                    localStorage.removeItem('attendance_supervisor_session');
+                                    showLoading(false);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('خطأ في استعادة الجلسة:', error);
+                                localStorage.removeItem('attendance_supervisor_session');
+                                showLoading(false);
+                            });
+                    } else {
+                        showLoading(false);
+                    }
+                } catch (error) {
+                    console.error('خطأ في تحليل بيانات الجلسة:', error);
+                    localStorage.removeItem('attendance_supervisor_session');
+                    showLoading(false);
+                }
+            }
+        }
+
+        // حفظ الجلسة
+        function saveSession(supervisor, remember = true) {
+            if (remember) {
+                const sessionData = {
+                    supervisorId: supervisor.id,
+                    supervisorName: supervisor.employeeName,
+                    loginTime: new Date().toISOString()
+                };
+                localStorage.setItem('attendance_supervisor_session', JSON.stringify(sessionData));
+            } else {
+                // استخدام sessionStorage بدلاً من localStorage (ينتهي عند إغلاق المتصفح)
+                const sessionData = {
+                    supervisorId: supervisor.id,
+                    supervisorName: supervisor.employeeName,
+                    loginTime: new Date().toISOString()
+                };
+                sessionStorage.setItem('attendance_supervisor_session', JSON.stringify(sessionData));
+            }
+        }
+
+        // مراقبة حالة الاتصال
+        function monitorConnection() {
+            const connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function(snap) {
+                isConnected = snap.val() === true;
+                if (isConnected) {
+                    showConnectionStatus('متصل بقاعدة البيانات', 'success');
+                } else {
+                    showConnectionStatus('غير متصل - يرجى التحقق من الاتصال', 'error');
+                }
+            });
+        }
+
+        function showConnectionStatus(message, type) {
+            connectionStatus.style.display = 'block';
+            connectionStatus.style.background = type === 'success' ? 
+                'linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%)' : 
+                'linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%)';
+            connectionStatus.innerHTML = `<i class="fas fa-${type === 'success' ? 'wifi' : 'wifi-slash'}"></i> ${message}`;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // تحميل قائمة المسؤولين من Firebase
+        function loadSupervisors() {
+            database.ref('supervisors').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        supervisors = Object.keys(data).map(key => {
+                            return { id: key, ...data[key] };
+                        });
+                    }
+                    populateSupervisorSelect();
+                })
+                .catch(error => {
+                    console.error('خطأ في تحميل المسؤولين:', error);
+                    showLoginError('فشل تحميل بيانات المسؤولين');
+                });
+        }
+
+        // تعبئة قائمة المسؤولين في شاشة الدخول
+        function populateSupervisorSelect() {
+            supervisorSelect.innerHTML = '<option value="">اختر اسمك من القائمة</option>';
+            
+            const activeSupervisors = supervisors.filter(sup => sup.active);
+            
+            if (activeSupervisors.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'لا يوجد مسؤولين نشطين';
+                option.disabled = true;
+                supervisorSelect.appendChild(option);
+                return;
+            }
+            
+            activeSupervisors.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
+            
+            activeSupervisors.forEach(sup => {
+                const option = document.createElement('option');
+                option.value = sup.id;
+                option.textContent = sup.employeeName;
+                supervisorSelect.appendChild(option);
+            });
+        }
+
+        // تسجيل الدخول
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const supervisorId = supervisorSelect.value;
+            const password = supervisorPassword.value;
+            const rememberMe = rememberMeCheckbox.checked;
+            
+            if (!supervisorId || !password) {
+                showLoginError('يرجى اختيار اسم المسؤول وإدخال كلمة السر');
+                return;
+            }
+            
+            const supervisor = supervisors.find(s => s.id === supervisorId);
+            
+            if (supervisor && supervisor.password === password) {
+                // تسجيل الدخول ناجح
+                currentSupervisor = supervisor;
+                currentUserName.textContent = supervisor.employeeName;
+                
+                // حفظ الجلسة
+                saveSession(supervisor, rememberMe);
+                
+                // إخفاء شاشة الدخول وإظهار التطبيق
+                loginScreen.style.display = 'none';
+                appContainer.style.display = 'block';
+                
+                // تحميل البيانات الضرورية
+                loadAllData();
+                
+                // إظهار رسالة ترحيب
+                showTemporaryMessage(`مرحباً ${supervisor.employeeName}`, 'success');
+            } else {
+                showLoginError('اسم المسؤول أو كلمة السر غير صحيحة');
+            }
+        });
+
+        // إظهار خطأ تسجيل الدخول
+        function showLoginError(message) {
+            document.getElementById('errorText').textContent = message;
+            loginError.style.display = 'block';
+            loginButton.style.animation = 'shake 0.5s ease';
+            
+            setTimeout(() => {
+                loginError.style.display = 'none';
+                loginButton.style.animation = '';
+            }, 3000);
+        }
+
+        // إضافة تأثير الاهتزاز
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // تسجيل الخروج
+        logoutBtn.addEventListener('click', function() {
+            // حذف الجلسة من جميع التخزينات
+            localStorage.removeItem('attendance_supervisor_session');
+            sessionStorage.removeItem('attendance_supervisor_session');
+            
+            currentSupervisor = null;
+            appContainer.style.display = 'none';
+            loginScreen.style.display = 'flex';
+            loginScreen.style.flexDirection = 'column';
+            loginScreen.style.justifyContent = 'center';
+            supervisorSelect.value = '';
+            supervisorPassword.value = '';
+            
+            // إيقاف التحديث التلقائي
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+
+        // التنقل بين الصفحات
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                
+                // تحديث النشط
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // عرض الصفحة المناسبة
+                showPage(page);
+            });
+        });
+
+        // عرض الصفحة المحددة
+        function showPage(page) {
+            const titles = {
+                'dashboard': 'الرئيسية',
+                'attendance': 'تسجيل الحضور',
+                'leaves': 'إدارة الإجازات',
+                'faults': 'تسجيل الأعطال',
+                'financial': 'السلف والمكافآت',
+                'cash': 'إدارة العهدة'
+            };
+            
+            pageTitle.innerHTML = `<i class="fas fa-${getIconForPage(page)}"></i> <span>${titles[page]}</span>`;
+            
+            switch(page) {
+                case 'dashboard':
+                    showDashboard();
+                    break;
+                case 'attendance':
+                    showAttendancePage();
+                    break;
+                case 'leaves':
+                    showLeavesPage();
+                    break;
+                case 'faults':
+                    showFaultsPage();
+                    break;
+                case 'financial':
+                    showFinancialPage();
+                    break;
+                case 'cash':
+                    showCashPage();
+                    break;
+            }
+        }
+
+        function getIconForPage(page) {
+            const icons = {
+                'dashboard': 'home',
+                'attendance': 'user-check',
+                'leaves': 'umbrella-beach',
+                'faults': 'exclamation-triangle',
+                'financial': 'hand-holding-usd',
+                'cash': 'wallet'
+            };
+            return icons[page];
+        }
+
+        // تحميل جميع البيانات
+        function loadAllData() {
+            showLoading(true);
+            
+            Promise.all([
+                loadData('employees'),
+                loadData('stations'),
+                loadData('attendance'),
+                loadData('leaves'),
+                loadData('faults'),
+                loadData('financials'),
+                loadData('cashTransactions') // تحميل بيانات العهدة
+            ]).then(() => {
+                showLoading(false);
+                showDashboard();
+                showConnectionStatus('تم تحميل البيانات بنجاح', 'success');
+            }).catch(error => {
+                console.error('خطأ في تحميل البيانات:', error);
+                showLoading(false);
+                showError('حدث خطأ في تحميل البيانات');
+            });
+        }
+
+        // تحميل بيانات من Firebase
+        function loadData(dataType) {
+            return new Promise((resolve, reject) => {
+                database.ref(dataType).once('value')
+                    .then((snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            const dataArray = Object.keys(data).map(key => {
+                                return { id: key, ...data[key] };
+                            });
+                            
+                            if (dataType === 'employees') employees = dataArray;
+                            else if (dataType === 'stations') stations = dataArray;
+                            else if (dataType === 'attendance') attendance = dataArray;
+                            else if (dataType === 'leaves') leaves = dataArray;
+                            else if (dataType === 'faults') faults = dataArray;
+                            else if (dataType === 'financials') financials = dataArray;
+                            else if (dataType === 'cashTransactions') cashTransactions = dataArray;
+                        } else {
+                            if (dataType === 'employees') employees = [];
+                            else if (dataType === 'stations') stations = [];
+                            else if (dataType === 'attendance') attendance = [];
+                            else if (dataType === 'leaves') leaves = [];
+                            else if (dataType === 'faults') faults = [];
+                            else if (dataType === 'financials') financials = [];
+                            else if (dataType === 'cashTransactions') cashTransactions = [];
+                        }
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error(`خطأ في تحميل ${dataType}:`, error);
+                        reject(error);
+                    });
+            });
+        }
+
+        // إضافة بيانات إلى Firebase
+        function addData(dataType, newItem) {
+            return new Promise((resolve, reject) => {
+                const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+                
+                database.ref(`${dataType}/${newId}`).set(newItem)
+                    .then(() => {
+                        const itemWithId = { id: newId, ...newItem };
+                        
+                        if (dataType === 'attendance') attendance.push(itemWithId);
+                        else if (dataType === 'leaves') leaves.push(itemWithId);
+                        else if (dataType === 'faults') faults.push(itemWithId);
+                        else if (dataType === 'financials') financials.push(itemWithId);
+                        else if (dataType === 'cashTransactions') cashTransactions.push(itemWithId);
+                        
+                        resolve(itemWithId);
+                    })
+                    .catch(error => {
+                        console.error(`خطأ في إضافة ${dataType}:`, error);
+                        reject(error);
+                    });
+            });
+        }
+
+        // تحديث بيانات في Firebase
+        function updateData(dataType, id, updatedData) {
+            return new Promise((resolve, reject) => {
+                database.ref(`${dataType}/${id}`).update(updatedData)
+                    .then(() => {
+                        // تحديث المصفوفة المحلية
+                        if (dataType === 'attendance') {
+                            const index = attendance.findIndex(item => item.id === id);
+                            if (index !== -1) attendance[index] = { ...attendance[index], ...updatedData };
+                        } else if (dataType === 'leaves') {
+                            const index = leaves.findIndex(item => item.id === id);
+                            if (index !== -1) leaves[index] = { ...leaves[index], ...updatedData };
+                        } else if (dataType === 'faults') {
+                            const index = faults.findIndex(item => item.id === id);
+                            if (index !== -1) faults[index] = { ...faults[index], ...updatedData };
+                        } else if (dataType === 'financials') {
+                            const index = financials.findIndex(item => item.id === id);
+                            if (index !== -1) financials[index] = { ...financials[index], ...updatedData };
+                        } else if (dataType === 'cashTransactions') {
+                            const index = cashTransactions.findIndex(item => item.id === id);
+                            if (index !== -1) cashTransactions[index] = { ...cashTransactions[index], ...updatedData };
+                        }
+                        
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error(`خطأ في تحديث ${dataType}:`, error);
+                        reject(error);
+                    });
+            });
+        }
+
+        // حذف بيانات من Firebase
+        function deleteData(dataType, id) {
+            return new Promise((resolve, reject) => {
+                database.ref(`${dataType}/${id}`).remove()
+                    .then(() => {
+                        if (dataType === 'attendance') attendance = attendance.filter(item => item.id !== id);
+                        else if (dataType === 'leaves') leaves = leaves.filter(item => item.id !== id);
+                        else if (dataType === 'faults') faults = faults.filter(item => item.id !== id);
+                        else if (dataType === 'financials') financials = financials.filter(item => item.id !== id);
+                        else if (dataType === 'cashTransactions') cashTransactions = cashTransactions.filter(item => item.id !== id);
+                        
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error(`خطأ في حذف ${dataType}:`, error);
+                        reject(error);
+                    });
+            });
+        }
+
+        // إرسال إشعار واتساب للمدير العام عند تسجيل عطل جديد
+        function sendFaultNotificationToManager(faultData) {
+            try {
+                // تكوين رسالة الإشعار
+                const message = `🚨 *تنبيه عطل جديد* 🚨
+                
+🔧 *العنوان:* ${faultData.title}
+📍 *المحطة:* ${faultData.stationName}
+📝 *التفاصيل:* ${faultData.description}
+📅 *التاريخ:* ${faultData.date}
+👤 *المسجل:* ${faultData.supervisorName}
+⏰ *الوقت:* ${new Date().toLocaleTimeString('ar-EG')}
+
+يرجى فتح التطبيق لمتابعة المزيد من التفاصيل.`;
+
+                // ترميز الرسالة للواتساب
+                const encodedMessage = encodeURIComponent(message);
+                
+                // رابط واتساب (بدون + وبدون صفر في البداية)
+                const whatsappUrl = `https://wa.me/${MANAGER_PHONE}?text=${encodedMessage}`;
+                
+                // فتح واتساب في نافذة جديدة
+                window.open(whatsappUrl, '_blank');
+                
+                console.log('تم إرسال إشعار للمدير العام عبر واتساب');
+                return true;
+            } catch (error) {
+                console.error('خطأ في إرسال إشعار واتساب:', error);
+                return false;
+            }
+        }
+
+        // عرض مؤشر التحميل
+        function showLoading(show) {
+            if (show) {
+                mainContent.innerHTML = `
+                    <div class="loading-large">
+                        <div class="spinner"></div>
+                        <p style="color: var(--gray); font-size: 1.1rem;">جاري تحميل البيانات...</p>
+                    </div>
+                `;
+            }
+        }
+
+        // عرض رسالة خطأ
+        function showError(message) {
+            mainContent.innerHTML = `
+                <div class="alert alert-error" style="text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 20px; display: block;"></i>
+                    <p style="margin-bottom: 20px; font-size: 1.1rem;">${message}</p>
+                    <button onclick="loadAllData()" style="width: auto; padding: 15px 30px; margin: 0 auto;">
+                        <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                    </button>
+                </div>
+            `;
+        }
+
+        // ==================== صفحة لوحة التحكم ====================
+        function showDashboard() {
+            const today = getTodayDate();
+            
+            // إحصائيات اليوم
+            const todayAttendance = attendance.filter(a => a.date === today && a.supervisorId === currentSupervisor.id);
+            const todayLeaves = leaves.filter(l => l.start <= today && l.end >= today && l.supervisorId === currentSupervisor.id);
+            const pendingFaults = faults.filter(f => f.status !== 'fixed' && f.supervisorId === currentSupervisor.id);
+            const todayFinancials = financials.filter(f => f.date === today && f.supervisorId === currentSupervisor.id);
+            
+            // إحصائيات العهدة
+            const cashBalance = calculateCashBalance();
+            const todayCashTransactions = cashTransactions.filter(c => c.date === today && c.supervisorId === currentSupervisor.id);
+            
+            mainContent.innerHTML = `
+                <div class="welcome-message">
+                    <h3><i class="fas fa-sun"></i> مرحباً ${currentSupervisor.employeeName}</h3>
+                    <p>تاريخ اليوم: ${new Date().toLocaleDateString('ar-EG')}</p>
+                </div>
+                
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${todayAttendance.length}</div>
+                        <div class="stat-label">تسجيلات اليوم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${todayLeaves.length}</div>
+                        <div class="stat-label">إجازات اليوم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${pendingFaults.length}</div>
+                        <div class="stat-label">أعطال نشطة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${todayFinancials.length}</div>
+                        <div class="stat-label">حركات مالية</div>
+                    </div>
+                </div>
+                
+                <div class="cash-stats">
+                    <div class="cash-stat-card">
+                        <div class="cash-stat-label">رصيد العهدة</div>
+                        <div class="cash-stat-value">${cashBalance} ج.م</div>
+                    </div>
+                    <div class="cash-stat-card">
+                        <div class="cash-stat-label">حركات اليوم</div>
+                        <div class="cash-stat-value">${todayCashTransactions.length}</div>
+                    </div>
+                    <div class="cash-stat-card">
+                        <div class="cash-stat-label">إجمالي الحركات</div>
+                        <div class="cash-stat-value">${cashTransactions.length}</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-clock"></i> آخر تسجيلات الحضور
+                    </div>
+                    <div class="card-body">
+                        ${displayRecentAttendance()}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-exclamation-triangle"></i> الأعطال النشطة
+                    </div>
+                    <div class="card-body">
+                        ${displayActiveFaults()}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-wallet"></i> آخر حركات العهدة
+                    </div>
+                    <div class="card-body">
+                        ${displayRecentCashTransactions()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayRecentAttendance() {
+            const recent = attendance
+                .filter(a => a.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
+            if (recent.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-calendar-times"></i>لا توجد تسجيلات حديثة</div>';
+            }
+            
+            let html = '';
+            recent.forEach(record => {
+                const statusClass = record.status === 'حاضر' ? 'status-present' : 
+                                   record.status === 'غائب' ? 'status-absent' : 'status-leave';
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${record.employeeName}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${record.stationName || 'غير محدد'}</span>
+                                <span>${record.date}</span>
+                            </div>
+                        </div>
+                        <div class="${statusClass}">${record.status}</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function displayActiveFaults() {
+            const active = faults
+                .filter(f => f.status !== 'fixed' && f.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
+            if (active.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-check-circle"></i>لا توجد أعطال نشطة</div>';
+            }
+            
+            let html = '';
+            active.forEach(fault => {
+                const statusClass = fault.status === 'in-progress' ? 'status-leave' : 'status-absent';
+                const statusText = fault.status === 'in-progress' ? 'جاري الإصلاح' : 'لم يتم الإصلاح';
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${fault.title}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${fault.stationName}</span>
+                                <span class="${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="item-subtitle">${fault.date}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function displayRecentCashTransactions() {
+            const recent = cashTransactions
+                .filter(c => c.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
+            if (recent.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-coins"></i>لا توجد حركات عهدة حديثة</div>';
+            }
+            
+            let html = '';
+            recent.forEach(transaction => {
+                const amountClass = transaction.type === 'إيداع' ? 'cash-positive' : 'cash-negative';
+                const amountSign = transaction.type === 'إيداع' ? '+' : '-';
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${transaction.description || transaction.type}</div>
+                            <div class="item-subtitle">
+                                <span>${transaction.date}</span>
+                                <span>${transaction.type}</span>
+                            </div>
+                        </div>
+                        <div class="${amountClass}">${amountSign} ${transaction.amount} ج.م</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // حساب رصيد العهدة
+        function calculateCashBalance() {
+            let balance = 0;
+            cashTransactions.forEach(transaction => {
+                if (transaction.type === 'إيداع') {
+                    balance += transaction.amount;
+                } else if (transaction.type === 'صرف') {
+                    balance -= transaction.amount;
+                }
+            });
+            return balance;
+        }
+
+        // ==================== صفحة تسجيل الحضور ====================
+        function showAttendancePage() {
+            const today = getTodayDate();
+            
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-check"></i> تسجيل الحضور والغياب
+                    </div>
+                    <div class="card-body">
+                        <form id="attendanceForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> الموظف</label>
+                                <select id="attendanceEmployee" required>
+                                    <option value="">اختر الموظف</option>
+                                    ${getEmployeesOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> المحطة</label>
+                                <select id="attendanceStation" required>
+                                    <option value="">اختر المحطة</option>
+                                    ${getStationsOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> التاريخ</label>
+                                <input type="date" id="attendanceDate" value="${today}" min="${today}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> الحالة</label>
+                                <select id="attendanceStatus" required>
+                                    <option value="حاضر">✅ حاضر (موجود في المحطة)</option>
+                                    <option value="غائب">❌ غائب (غير موجود)</option>
+                                    <option value="إجازة">🏖️ إجازة</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn-success">
+                                <span id="attendanceSubmitText"><i class="fas fa-save"></i> تسجيل الحضور</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i> آخر تسجيلاتي
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="form-group">
+                                <label><i class="fas fa-filter"></i> فلترة حسب التاريخ</label>
+                                <input type="date" id="filterAttendanceDate" value="${today}" min="${today}">
+                            </div>
+                        </div>
+                        <div id="myAttendanceList">
+                            ${displayMyAttendance(today)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // إضافة مستمع الحدث للنموذج
+            document.getElementById('attendanceForm').addEventListener('submit', recordAttendance);
+            document.getElementById('filterAttendanceDate').addEventListener('change', function() {
+                document.getElementById('myAttendanceList').innerHTML = displayMyAttendance(this.value);
+            });
+        }
+
+        function getEmployeesOptions() {
+            const activeEmployees = employees.filter(emp => emp.active);
+            if (activeEmployees.length === 0) {
+                return '<option value="" disabled>لا يوجد موظفين نشطين</option>';
+            }
+            return activeEmployees.map(emp => 
+                `<option value="${emp.name}">${emp.name}</option>`
+            ).join('');
+        }
+
+        function getStationsOptions() {
+            if (stations.length === 0) {
+                return '<option value="" disabled>لا توجد محطات مسجلة</option>';
+            }
+            return stations.map(station => 
+                `<option value="${station.name}">${station.name}</option>`
+            ).join('');
+        }
+
+        function recordAttendance(e) {
+            e.preventDefault();
+            
+            const employeeName = document.getElementById('attendanceEmployee').value;
+            const stationName = document.getElementById('attendanceStation').value;
+            const date = document.getElementById('attendanceDate').value;
+            const status = document.getElementById('attendanceStatus').value;
+            
+            if (!employeeName || !stationName || !date || !status) {
+                showTemporaryMessage('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            const existingRecord = attendance.find(record => 
+                record.employeeName === employeeName && record.date === date
+            );
+            
+            const submitBtn = document.getElementById('attendanceSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newAttendance = {
+                employeeName,
+                stationName,
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                date,
+                status,
+                timestamp: new Date().toISOString()
+            };
+            
+            let promise;
+            
+            if (existingRecord) {
+                promise = updateData('attendance', existingRecord.id, newAttendance);
+            } else {
+                promise = addData('attendance', newAttendance);
+            }
+            
+            promise.then(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                document.getElementById('attendanceForm').reset();
+                document.getElementById('attendanceDate').value = getTodayDate();
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الحضور';
+                }, 2000);
+                
+                // تحديث القائمة
+                const filterDate = document.getElementById('filterAttendanceDate').value;
+                document.getElementById('myAttendanceList').innerHTML = displayMyAttendance(filterDate);
+                
+                showTemporaryMessage('تم تسجيل الحضور بنجاح', 'success');
+            }).catch(error => {
+                submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                console.error(error);
+                showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+            });
+        }
+
+        function displayMyAttendance(date) {
+            const myAttendance = attendance
+                .filter(a => a.supervisorId === currentSupervisor.id && a.date === date)
+                .sort((a, b) => a.employeeName.localeCompare(b.employeeName));
+            
+            if (myAttendance.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-calendar-times"></i>لا توجد تسجيلات لهذا اليوم</div>';
+            }
+            
+            let html = '';
+            myAttendance.forEach(record => {
+                const statusClass = record.status === 'حاضر' ? 'status-present' : 
+                                   record.status === 'غائب' ? 'status-absent' : 'status-leave';
+                const statusIcon = record.status === 'حاضر' ? '✅' : 
+                                  record.status === 'غائب' ? '❌' : '🏖️';
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${record.employeeName}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${record.stationName}</span>
+                            </div>
+                        </div>
+                        <div class="${statusClass}">${statusIcon} ${record.status}</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // ==================== صفحة إدارة الإجازات ====================
+        function showLeavesPage() {
+            const today = getTodayDate();
+            
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-umbrella-beach"></i> تسجيل إجازة جديدة
+                    </div>
+                    <div class="card-body">
+                        <form id="leaveForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> الموظف</label>
+                                <select id="leaveEmployee" required>
+                                    <option value="">اختر الموظف</option>
+                                    ${getEmployeesOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> المحطة</label>
+                                <select id="leaveStation" required>
+                                    <option value="">اختر المحطة</option>
+                                    ${getStationsOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> نوع الإجازة</label>
+                                <select id="leaveType" required>
+                                    <option value="سنوية">📅 سنوية</option>
+                                    <option value="مرضية">🏥 مرضية</option>
+                                    <option value="طارئة">⚡ طارئة</option>
+                                    <option value="أخرى">🔄 أخرى</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-start"></i> تاريخ البدء</label>
+                                <input type="date" id="leaveStart" value="${today}" min="${today}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-end"></i> تاريخ الانتهاء</label>
+                                <input type="date" id="leaveEnd" value="${today}" min="${today}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                                <textarea id="leaveNotes" rows="3" placeholder="أدخل ملاحظات حول الإجازة (اختياري)"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn-warning">
+                                <span id="leaveSubmitText"><i class="fas fa-save"></i> تسجيل الإجازة</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i> الإجازات النشطة
+                    </div>
+                    <div class="card-body" id="activeLeavesList">
+                        ${displayActiveLeaves()}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('leaveForm').addEventListener('submit', recordLeave);
+        }
+
+        function recordLeave(e) {
+            e.preventDefault();
+            
+            const employeeName = document.getElementById('leaveEmployee').value;
+            const stationName = document.getElementById('leaveStation').value;
+            const type = document.getElementById('leaveType').value;
+            const start = document.getElementById('leaveStart').value;
+            const end = document.getElementById('leaveEnd').value;
+            const notes = document.getElementById('leaveNotes').value;
+            
+            if (!employeeName || !stationName || !type || !start || !end) {
+                showTemporaryMessage('يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            if (new Date(start) > new Date(end)) {
+                showTemporaryMessage('تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('leaveSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newLeave = {
+                employeeName,
+                stationName,
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                type,
+                start,
+                end,
+                notes: notes || '',
+                timestamp: new Date().toISOString()
+            };
+            
+            addData('leaves', newLeave)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    document.getElementById('leaveForm').reset();
+                    document.getElementById('leaveStart').value = getTodayDate();
+                    document.getElementById('leaveEnd').value = getTodayDate();
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الإجازة';
+                    }, 2000);
+                    
+                    document.getElementById('activeLeavesList').innerHTML = displayActiveLeaves();
+                    showTemporaryMessage('تم تسجيل الإجازة بنجاح', 'success');
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        }
+
+        function displayActiveLeaves() {
+            const today = getTodayDate();
+            const activeLeaves = leaves
+                .filter(l => l.end >= today && l.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            if (activeLeaves.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-calendar-check"></i>لا توجد إجازات نشطة</div>';
+            }
+            
+            let html = '';
+            activeLeaves.forEach(leave => {
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${leave.employeeName}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${leave.stationName}</span>
+                                <span>${leave.type}</span>
+                            </div>
+                            <div class="item-subtitle">
+                                <i class="fas fa-calendar"></i> من ${leave.start} إلى ${leave.end}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // ==================== صفحة تسجيل الأعطال ====================
+        function showFaultsPage() {
+            const today = getTodayDate();
+            
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-exclamation-triangle"></i> تسجيل عطل جديد
+                    </div>
+                    <div class="card-body">
+                        <div class="whatsapp-badge">
+                            <i class="fab fa-whatsapp"></i>
+                            سيتم إرسال إشعار فوري للمدير العام (${MANAGER_DISPLAY_PHONE})
+                        </div>
+                        
+                        <form id="faultForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> المحطة</label>
+                                <select id="faultStation" required>
+                                    <option value="">اختر المحطة</option>
+                                    ${getStationsOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-heading"></i> عنوان العطل</label>
+                                <input type="text" id="faultTitle" required placeholder="أدخل عنوان العطل">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-align-left"></i> تفاصيل العطل</label>
+                                <textarea id="faultDescription" rows="4" required placeholder="أدخل تفاصيل العطل"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> تاريخ العطل</label>
+                                <input type="date" id="faultDate" value="${today}" min="${today}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> حالة العطل</label>
+                                <select id="faultStatus" required>
+                                    <option value="pending">⏳ لم يتم الإصلاح</option>
+                                    <option value="in-progress">🔄 جاري الإصلاح</option>
+                                    <option value="fixed">✅ تم الإصلاح</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn-warning">
+                                <span id="faultSubmitText"><i class="fas fa-save"></i> تسجيل العطل</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i> الأعطال المسجلة
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="form-group">
+                                <label><i class="fas fa-filter"></i> فلترة حسب الحالة</label>
+                                <select id="filterFaultStatus">
+                                    <option value="">جميع الحالات</option>
+                                    <option value="pending">⏳ لم يتم الإصلاح</option>
+                                    <option value="in-progress">🔄 جاري الإصلاح</option>
+                                    <option value="fixed">✅ تم الإصلاح</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="faultsList">
+                            ${displayMyFaults()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('faultForm').addEventListener('submit', recordFault);
+            document.getElementById('filterFaultStatus').addEventListener('change', function() {
+                document.getElementById('faultsList').innerHTML = displayMyFaults(this.value);
+            });
+        }
+
+        function recordFault(e) {
+            e.preventDefault();
+            
+            const stationName = document.getElementById('faultStation').value;
+            const title = document.getElementById('faultTitle').value;
+            const description = document.getElementById('faultDescription').value;
+            const date = document.getElementById('faultDate').value;
+            const status = document.getElementById('faultStatus').value;
+            
+            if (!stationName || !title || !description || !date || !status) {
+                showTemporaryMessage('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('faultSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newFault = {
+                stationName,
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                title,
+                description,
+                date,
+                status,
+                timestamp: new Date().toISOString()
+            };
+            
+            addData('faults', newFault)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    
+                    // إرسال إشعار واتساب للمدير العام
+                    const notificationSent = sendFaultNotificationToManager(newFault);
+                    
+                    if (notificationSent) {
+                        showTemporaryMessage('تم تسجيل العطل وإرسال إشعار للمدير العام', 'success');
+                    } else {
+                        showTemporaryMessage('تم تسجيل العطل ولكن فشل إرسال الإشعار', 'warning');
+                    }
+                    
+                    document.getElementById('faultForm').reset();
+                    document.getElementById('faultDate').value = getTodayDate();
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل العطل';
+                    }, 3000);
+                    
+                    const filterStatus = document.getElementById('filterFaultStatus').value;
+                    document.getElementById('faultsList').innerHTML = displayMyFaults(filterStatus);
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        }
+
+        function displayMyFaults(statusFilter = '') {
+            let filtered = faults
+                .filter(f => f.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (statusFilter) {
+                filtered = filtered.filter(f => f.status === statusFilter);
+            }
+            
+            if (filtered.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-tools"></i>لا توجد أعطال مسجلة</div>';
+            }
+            
+            let html = '';
+            filtered.forEach(fault => {
+                const statusClass = fault.status === 'fixed' ? 'status-present' :
+                                   fault.status === 'in-progress' ? 'status-leave' : 'status-absent';
+                const statusText = fault.status === 'fixed' ? '✅ تم الإصلاح' :
+                                  fault.status === 'in-progress' ? '🔄 جاري الإصلاح' : '⏳ لم يتم الإصلاح';
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${fault.title}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${fault.stationName}</span>
+                                <span class="${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="item-subtitle">
+                                <i class="fas fa-calendar"></i> ${fault.date}
+                            </div>
+                            <div class="item-subtitle">
+                                ${fault.description.substring(0, 60)}${fault.description.length > 60 ? '...' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // ==================== صفحة السلف والمكافآت ====================
+        function showFinancialPage() {
+            const today = getTodayDate();
+            
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-hand-holding-usd"></i> تسجيل حركة مالية
+                    </div>
+                    <div class="card-body">
+                        <form id="financialForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> الموظف</label>
+                                <select id="financialEmployee" required>
+                                    <option value="">اختر الموظف</option>
+                                    ${getEmployeesOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> المحطة</label>
+                                <select id="financialStation" required>
+                                    <option value="">اختر المحطة</option>
+                                    ${getStationsOptions()}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-tag"></i> النوع</label>
+                                <select id="financialType" required>
+                                    <option value="سلفة">💰 سلفة</option>
+                                    <option value="مكافأة">🎁 مكافأة</option>
+                                    <option value="خصم">📉 خصم</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-money-bill"></i> المبلغ (جنيه مصري)</label>
+                                <input type="number" id="financialAmount" required placeholder="أدخل المبلغ" min="1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> التاريخ</label>
+                                <input type="date" id="financialDate" value="${today}" min="${today}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                                <textarea id="financialNotes" rows="3" placeholder="أدخل ملاحظات حول الحركة المالية (اختياري)"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn-success">
+                                <span id="financialSubmitText"><i class="fas fa-save"></i> تسجيل الحركة</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i> آخر الحركات المالية
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="form-group">
+                                <label><i class="fas fa-filter"></i> فلترة حسب التاريخ</label>
+                                <input type="date" id="filterFinancialDate" value="${today}" min="${today}">
+                            </div>
+                        </div>
+                        <div id="financialList">
+                            ${displayMyFinancials(today)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('financialForm').addEventListener('submit', recordFinancial);
+            document.getElementById('filterFinancialDate').addEventListener('change', function() {
+                document.getElementById('financialList').innerHTML = displayMyFinancials(this.value);
+            });
+        }
+
+        function recordFinancial(e) {
+            e.preventDefault();
+            
+            const employeeName = document.getElementById('financialEmployee').value;
+            const stationName = document.getElementById('financialStation').value;
+            const type = document.getElementById('financialType').value;
+            const amount = parseInt(document.getElementById('financialAmount').value);
+            const date = document.getElementById('financialDate').value;
+            const notes = document.getElementById('financialNotes').value;
+            
+            if (!employeeName || !stationName || !type || !amount || !date) {
+                showTemporaryMessage('يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showTemporaryMessage('يرجى إدخال مبلغ صحيح أكبر من صفر', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('financialSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newFinancial = {
+                employeeName,
+                stationName,
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                type,
+                amount,
+                date,
+                notes: notes || '',
+                timestamp: new Date().toISOString()
+            };
+            
+            addData('financials', newFinancial)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    document.getElementById('financialForm').reset();
+                    document.getElementById('financialDate').value = getTodayDate();
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الحركة';
+                    }, 2000);
+                    
+                    const filterDate = document.getElementById('filterFinancialDate').value;
+                    document.getElementById('financialList').innerHTML = displayMyFinancials(filterDate);
+                    showTemporaryMessage('تم تسجيل الحركة بنجاح', 'success');
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        }
+
+        function displayMyFinancials(date) {
+            const myFinancials = financials
+                .filter(f => f.supervisorId === currentSupervisor.id && f.date === date)
+                .sort((a, b) => a.employeeName.localeCompare(b.employeeName));
+            
+            if (myFinancials.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-coins"></i>لا توجد حركات مالية لهذا اليوم</div>';
+            }
+            
+            let html = '';
+            myFinancials.forEach(financial => {
+                const amountClass = financial.type === 'مكافأة' ? 'status-present' :
+                                   financial.type === 'سلفة' ? 'status-absent' : 'status-leave';
+                const amountIcon = financial.type === 'مكافأة' ? '🎁' :
+                                  financial.type === 'سلفة' ? '💰' : '📉';
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${financial.employeeName}</div>
+                            <div class="item-subtitle">
+                                <span class="station-badge">${financial.stationName}</span>
+                                <span>${financial.type}</span>
+                            </div>
+                        </div>
+                        <div class="${amountClass}">${amountIcon} ${financial.amount} ج.م</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // ==================== صفحة إدارة العهدة ====================
+        function showCashPage() {
+            const today = getTodayDate();
+            const balance = calculateCashBalance();
+            
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-wallet"></i> إدارة العهدة
+                    </div>
+                    <div class="card-body">
+                        <div class="cash-summary">
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">الرصيد الحالي:</span>
+                                <span class="cash-summary-value">${balance} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي الإيداعات:</span>
+                                <span class="cash-summary-value">${calculateTotalDeposits()} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي المصروفات:</span>
+                                <span class="cash-summary-value">${calculateTotalWithdrawals()} ج.م</span>
+                            </div>
+                        </div>
+                        
+                        <div class="cash-tabs">
+                            <div class="cash-tab active" data-tab="deposit">إيداع</div>
+                            <div class="cash-tab" data-tab="withdrawal">صرف</div>
+                        </div>
+                        
+                        <div id="deposit" class="cash-tab-content active">
+                            <form id="cashDepositForm">
+                                <div class="form-group">
+                                    <label><i class="fas fa-building"></i> المحطة (اختياري)</label>
+                                    <select id="cashStation">
+                                        <option value="">اختر المحطة (اختياري)</option>
+                                        ${getStationsOptions()}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-money-bill"></i> المبلغ (جنيه مصري)</label>
+                                    <input type="number" id="cashAmount" required placeholder="أدخل المبلغ" min="1">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-calendar"></i> التاريخ</label>
+                                    <input type="date" id="cashDate" value="${today}" min="${today}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-align-left"></i> سبب الإيداع</label>
+                                    <input type="text" id="cashDepositReason" required placeholder="أدخل سبب الإيداع">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                                    <textarea id="cashNotes" rows="3" placeholder="أدخل ملاحظات (اختياري)"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn-cash">
+                                    <span id="cashDepositSubmitText"><i class="fas fa-plus-circle"></i> تسجيل إيداع</span>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div id="withdrawal" class="cash-tab-content">
+                            <form id="cashWithdrawalForm">
+                                <div class="form-group">
+                                    <label><i class="fas fa-building"></i> المحطة (اختياري)</label>
+                                    <select id="cashWithdrawalStation">
+                                        <option value="">اختر المحطة (اختياري)</option>
+                                        ${getStationsOptions()}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-money-bill"></i> المبلغ (جنيه مصري)</label>
+                                    <input type="number" id="cashWithdrawalAmount" required placeholder="أدخل المبلغ" min="1" max="${balance}">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-calendar"></i> التاريخ</label>
+                                    <input type="date" id="cashWithdrawalDate" value="${today}" min="${today}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-align-left"></i> سبب الصرف</label>
+                                    <input type="text" id="cashWithdrawalReason" required placeholder="أدخل سبب الصرف">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-user"></i> المستلم</label>
+                                    <input type="text" id="cashRecipient" required placeholder="أدخل اسم المستلم">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                                    <textarea id="cashWithdrawalNotes" rows="3" placeholder="أدخل ملاحظات (اختياري)"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn-warning">
+                                    <span id="cashWithdrawalSubmitText"><i class="fas fa-minus-circle"></i> تسجيل صرف</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i> سجل حركات العهدة
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-section">
+                            <div class="filter-with-button">
+                                <div class="form-group">
+                                    <label><i class="fas fa-filter"></i> فلترة حسب التاريخ</label>
+                                    <input type="date" id="filterCashDate" value="${today}" min="${today}">
+                                </div>
+                                <button class="btn-secondary" id="filterCashBtn">
+                                    <i class="fas fa-search"></i> بحث
+                                </button>
+                            </div>
+                            <div class="form-group" style="margin-top: 10px;">
+                                <label><i class="fas fa-tag"></i> نوع الحركة</label>
+                                <select id="filterCashType">
+                                    <option value="">جميع الحركات</option>
+                                    <option value="إيداع">إيداع</option>
+                                    <option value="صرف">صرف</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="cashTransactionsList">
+                            ${displayCashTransactions(today)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('cashDepositForm').addEventListener('submit', recordCashDeposit);
+            document.getElementById('cashWithdrawalForm').addEventListener('submit', recordCashWithdrawal);
+            document.getElementById('filterCashBtn').addEventListener('click', function() {
+                const filterDate = document.getElementById('filterCashDate').value;
+                const filterType = document.getElementById('filterCashType').value;
+                document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
+            });
+            document.getElementById('filterCashType').addEventListener('change', function() {
+                const filterDate = document.getElementById('filterCashDate').value;
+                const filterType = this.value;
+                document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
+            });
+            
+            // تفعيل التبويبات
+            document.querySelectorAll('.cash-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.cash-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.cash-tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // حساب إجمالي الإيداعات
+        function calculateTotalDeposits() {
+            return cashTransactions
+                .filter(t => t.type === 'إيداع')
+                .reduce((sum, t) => sum + t.amount, 0);
+        }
+
+        // حساب إجمالي المصروفات
+        function calculateTotalWithdrawals() {
+            return cashTransactions
+                .filter(t => t.type === 'صرف')
+                .reduce((sum, t) => sum + t.amount, 0);
+        }
+
+        // تسجيل إيداع
+        function recordCashDeposit(e) {
+            e.preventDefault();
+            
+            const stationName = document.getElementById('cashStation').value;
+            const amount = parseInt(document.getElementById('cashAmount').value);
+            const date = document.getElementById('cashDate').value;
+            const reason = document.getElementById('cashDepositReason').value;
+            const notes = document.getElementById('cashNotes').value;
+            
+            if (!amount || amount <= 0) {
+                showTemporaryMessage('يرجى إدخال مبلغ صحيح', 'error');
+                return;
+            }
+            
+            if (!reason) {
+                showTemporaryMessage('يرجى إدخال سبب الإيداع', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('cashDepositSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newTransaction = {
+                type: 'إيداع',
+                stationName: stationName || '',
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                amount,
+                date,
+                reason,
+                notes: notes || '',
+                description: `إيداع: ${reason}`,
+                timestamp: new Date().toISOString()
+            };
+            
+            addData('cashTransactions', newTransaction)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    document.getElementById('cashDepositForm').reset();
+                    document.getElementById('cashDate').value = getTodayDate();
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> تسجيل إيداع';
+                    }, 2000);
+                    
+                    const filterDate = document.getElementById('filterCashDate').value;
+                    const filterType = document.getElementById('filterCashType').value;
+                    document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
+                    
+                    // تحديث ملخص العهدة
+                    const balance = calculateCashBalance();
+                    const cashSummary = document.querySelector('.cash-summary');
+                    if (cashSummary) {
+                        cashSummary.innerHTML = `
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">الرصيد الحالي:</span>
+                                <span class="cash-summary-value">${balance} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي الإيداعات:</span>
+                                <span class="cash-summary-value">${calculateTotalDeposits()} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي المصروفات:</span>
+                                <span class="cash-summary-value">${calculateTotalWithdrawals()} ج.م</span>
+                            </div>
+                        `;
+                    }
+                    
+                    showTemporaryMessage('تم تسجيل الإيداع بنجاح', 'success');
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        }
+
+        // تسجيل صرف
+        function recordCashWithdrawal(e) {
+            e.preventDefault();
+            
+            const stationName = document.getElementById('cashWithdrawalStation').value;
+            const amount = parseInt(document.getElementById('cashWithdrawalAmount').value);
+            const date = document.getElementById('cashWithdrawalDate').value;
+            const reason = document.getElementById('cashWithdrawalReason').value;
+            const recipient = document.getElementById('cashRecipient').value;
+            const notes = document.getElementById('cashWithdrawalNotes').value;
+            
+            if (!amount || amount <= 0) {
+                showTemporaryMessage('يرجى إدخال مبلغ صحيح', 'error');
+                return;
+            }
+            
+            if (!reason) {
+                showTemporaryMessage('يرجى إدخال سبب الصرف', 'error');
+                return;
+            }
+            
+            if (!recipient) {
+                showTemporaryMessage('يرجى إدخال اسم المستلم', 'error');
+                return;
+            }
+            
+            const balance = calculateCashBalance();
+            if (amount > balance) {
+                showTemporaryMessage('المبلغ المطلوب أكبر من الرصيد المتوفر', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('cashWithdrawalSubmitText');
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            
+            const newTransaction = {
+                type: 'صرف',
+                stationName: stationName || '',
+                supervisorId: currentSupervisor.id,
+                supervisorName: currentSupervisor.employeeName,
+                amount,
+                date,
+                reason,
+                recipient,
+                notes: notes || '',
+                description: `صرف: ${reason} - المستلم: ${recipient}`,
+                timestamp: new Date().toISOString()
+            };
+            
+            addData('cashTransactions', newTransaction)
+                .then(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    document.getElementById('cashWithdrawalForm').reset();
+                    document.getElementById('cashWithdrawalDate').value = getTodayDate();
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-minus-circle"></i> تسجيل صرف';
+                    }, 2000);
+                    
+                    const filterDate = document.getElementById('filterCashDate').value;
+                    const filterType = document.getElementById('filterCashType').value;
+                    document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
+                    
+                    // تحديث ملخص العهدة
+                    const balance = calculateCashBalance();
+                    const cashSummary = document.querySelector('.cash-summary');
+                    if (cashSummary) {
+                        cashSummary.innerHTML = `
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">الرصيد الحالي:</span>
+                                <span class="cash-summary-value">${balance} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي الإيداعات:</span>
+                                <span class="cash-summary-value">${calculateTotalDeposits()} ج.م</span>
+                            </div>
+                            <div class="cash-summary-item">
+                                <span class="cash-summary-label">إجمالي المصروفات:</span>
+                                <span class="cash-summary-value">${calculateTotalWithdrawals()} ج.م</span>
+                            </div>
+                        `;
+                    }
+                    
+                    showTemporaryMessage('تم تسجيل الصرف بنجاح', 'success');
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        }
+
+        // عرض حركات العهدة
+        function displayCashTransactions(dateFilter = '', typeFilter = '') {
+            let filtered = cashTransactions
+                .filter(c => c.supervisorId === currentSupervisor.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (dateFilter) {
+                filtered = filtered.filter(c => c.date === dateFilter);
+            }
+            
+            if (typeFilter) {
+                filtered = filtered.filter(c => c.type === typeFilter);
+            }
+            
+            if (filtered.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-coins"></i>لا توجد حركات عهدة</div>';
+            }
+            
+            let html = '';
+            filtered.forEach(transaction => {
+                const amountClass = transaction.type === 'إيداع' ? 'cash-positive' : 'cash-negative';
+                const amountSign = transaction.type === 'إيداع' ? '+' : '-';
+                
+                let details = '';
+                if (transaction.type === 'إيداع') {
+                    details = `سبب الإيداع: ${transaction.reason || transaction.description || ''}`;
+                } else {
+                    details = `سبب الصرف: ${transaction.reason || ''} - المستلم: ${transaction.recipient || ''}`;
+                }
+                
+                html += `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <div class="item-title">${transaction.type} - ${transaction.amount} ج.م</div>
+                            <div class="item-subtitle">
+                                <span>${transaction.date}</span>
+                                ${transaction.stationName ? `<span class="station-badge">${transaction.stationName}</span>` : ''}
+                            </div>
+                            <div class="item-subtitle">${details}</div>
+                            ${transaction.notes ? `<div class="item-subtitle">ملاحظات: ${transaction.notes}</div>` : ''}
+                        </div>
+                        <div class="${amountClass}">${amountSign} ${transaction.amount} ج.م</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // عرض رسالة مؤقتة
+        function showTemporaryMessage(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '80px';
+            alertDiv.style.right = '15px';
+            alertDiv.style.left = '15px';
+            alertDiv.style.maxWidth = '400px';
+            alertDiv.style.margin = '0 auto';
+            alertDiv.style.zIndex = '1000';
+            alertDiv.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'}"></i> ${message}`;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // إضافة تأثير fadeOut
+        const fadeStyle = document.createElement('style');
+        fadeStyle.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(fadeStyle);
+    </script>
 </body>
 </html>
