@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>تطبيق المسؤولين - نظام الحضور المتكامل</title>
+    <title>تطبيق المسؤولين - نظام الحضور المتكامل مع العهدة</title>
     
     <!-- إعدادات PWA للتثبيت -->
     <link rel="manifest" href="data:application/manifest+json,{
@@ -38,7 +38,6 @@
     <meta name="theme-color" content="#4361ee">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
@@ -66,10 +65,9 @@
             --gray-light: #e9ecef;
             --whatsapp: #25D366;
             --whatsapp-dark: #128C7E;
-            --purple: #9b59b6;
-            --orange: #e67e22;
             --cash: #f1c40f;
             --cash-dark: #f39c12;
+            --negative: #e74c3c;
         }
 
         body {
@@ -339,17 +337,17 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
 
-        /* الهيدر */
+        /* الهيدر - مصغر */
         .app-header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px 20px 25px;
+            padding: 12px 15px 15px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.4);
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.3);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
         .header-content {
@@ -359,46 +357,51 @@
         }
 
         .app-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             background: rgba(255,255,255,0.15);
-            padding: 8px 18px;
-            border-radius: 30px;
+            padding: 6px 12px;
+            border-radius: 20px;
             backdrop-filter: blur(5px);
+        }
+
+        .app-title i {
+            font-size: 0.9rem;
+            margin-left: 5px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .user-name {
             background: rgba(255,255,255,0.15);
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 0.95rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             backdrop-filter: blur(5px);
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .user-name i {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .logout-btn {
             background: rgba(255,255,255,0.15);
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             color: white;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1.2rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -422,13 +425,13 @@
             background: white;
             display: flex;
             justify-content: space-around;
-            padding: 12px 5px;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+            padding: 8px 5px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.08);
             z-index: 100;
             max-width: 450px;
             margin: 0 auto;
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
 
         .nav-item {
@@ -437,13 +440,13 @@
             align-items: center;
             text-decoration: none;
             color: var(--gray);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             flex: 1;
-            padding: 8px 0;
+            padding: 5px 0;
             cursor: pointer;
-            border-radius: 20px;
+            border-radius: 15px;
             transition: all 0.3s;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .nav-item.active {
@@ -452,61 +455,61 @@
         }
 
         .nav-icon {
-            font-size: 1.4rem;
-            margin-bottom: 4px;
+            font-size: 1.2rem;
+            margin-bottom: 2px;
         }
 
         /* المحتوى الرئيسي */
         .main-content {
-            padding: 20px 15px;
-            padding-bottom: 90px;
+            padding: 15px 12px;
+            padding-bottom: 80px;
             overflow-y: auto;
-            max-height: calc(100vh - 130px);
+            max-height: calc(100vh - 100px);
         }
 
         /* البطاقات */
         .card {
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            margin-bottom: 15px;
             overflow: hidden;
             border: none;
         }
 
         .card-header {
-            padding: 18px 20px;
+            padding: 12px 15px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .card-header i {
-            font-size: 1.2rem;
-            margin-left: 8px;
+            font-size: 1rem;
+            margin-left: 6px;
         }
 
         .card-body {
-            padding: 20px;
+            padding: 15px;
         }
 
-        /* إحصائيات سريعة */
+        /* إحصائيات سريعة - مصفوفة من عمودين */
         .quick-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .stat-card {
             background: white;
-            border-radius: 20px;
-            padding: 18px 12px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 10px 6px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
             text-align: center;
             border: none;
             position: relative;
@@ -519,73 +522,78 @@
             top: 0;
             right: 0;
             width: 100%;
-            height: 5px;
+            height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--primary-dark));
         }
 
         .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 1.3rem;
+            font-weight: 700;
             color: var(--primary);
             line-height: 1.2;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .stat-label {
             color: var(--gray);
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        /* إحصائيات العهدة */
+        /* إحصائيات العهدة - مصفوفة من 3 أعمدة */
         .cash-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 12px;
         }
 
         .cash-stat-card {
             background: white;
-            border-radius: 20px;
-            padding: 15px 10px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 8px 4px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.04);
             text-align: center;
             border: none;
-            border-top: 5px solid var(--cash);
+            border-top: 3px solid var(--cash);
         }
 
         .cash-stat-value {
-            font-size: 1.2rem;
-            font-weight: 800;
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--cash-dark);
             line-height: 1.2;
-            margin: 5px 0;
+            margin: 2px 0;
+        }
+
+        .cash-stat-value.negative {
+            color: var(--negative);
         }
 
         .cash-stat-label {
             color: var(--gray);
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.65rem;
+            font-weight: 500;
         }
 
         /* تبويبات العهدة */
         .cash-tabs {
             display: flex;
             border-bottom: 2px solid var(--gray-light);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             overflow-x: auto;
         }
 
         .cash-tab {
             flex: 1;
-            padding: 12px 15px;
+            padding: 10px 5px;
             text-align: center;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--gray);
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
+            font-size: 0.85rem;
         }
 
         .cash-tab.active {
@@ -606,7 +614,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
+            padding: 12px;
             border-bottom: 1px solid var(--gray-light);
             transition: all 0.3s;
         }
@@ -624,99 +632,89 @@
         }
 
         .item-title {
-            font-weight: 700;
-            margin-bottom: 6px;
-            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
             color: var(--dark);
         }
 
         .item-subtitle {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .empty-state {
             text-align: center;
             color: var(--gray);
-            padding: 40px 20px;
+            padding: 30px 15px;
             font-style: normal;
             background: var(--light);
-            border-radius: 20px;
+            border-radius: 16px;
         }
 
         .empty-state i {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--gray-light);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: block;
         }
 
         /* حالة الحضور */
         .status-present {
             color: var(--success);
-            font-weight: 700;
+            font-weight: 600;
             background: rgba(6, 214, 160, 0.1);
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         .status-absent {
             color: var(--danger);
-            font-weight: 700;
+            font-weight: 600;
             background: rgba(239, 71, 111, 0.1);
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         .status-leave {
             color: var(--warning);
-            font-weight: 700;
+            font-weight: 600;
             background: rgba(255, 183, 3, 0.1);
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-        }
-
-        .status-fixed {
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .status-pending {
-            color: var(--danger);
-            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         /* حالة العهدة */
         .cash-positive {
             color: var(--success);
-            font-weight: 700;
+            font-weight: 600;
             background: rgba(6, 214, 160, 0.1);
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         .cash-negative {
-            color: var(--danger);
-            font-weight: 700;
-            background: rgba(239, 71, 111, 0.1);
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            color: var(--negative);
+            font-weight: 600;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         /* الفلاتر */
         .filter-section {
             background: var(--light);
-            padding: 15px;
-            border-radius: 18px;
-            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 12px;
             border: none;
         }
 
@@ -727,12 +725,12 @@
         /* شارة المحطة */
         .station-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
-            font-weight: 600;
+            font-weight: 500;
         }
 
         /* شارة واتساب */
@@ -740,13 +738,13 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             background: rgba(37, 211, 102, 0.1);
             color: var(--whatsapp-dark);
-            font-weight: 600;
-            margin-bottom: 15px;
+            font-weight: 500;
+            margin-bottom: 12px;
         }
 
         .whatsapp-badge i {
@@ -756,29 +754,29 @@
         /* حالة الاتصال */
         .connection-status {
             position: fixed;
-            top: 80px;
-            left: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
+            top: 60px;
+            left: 15px;
+            right: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             z-index: 1000;
             color: white;
             display: none;
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
             max-width: 400px;
             margin: 0 auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(5px);
         }
 
         /* مؤشر التحميل */
         .loading {
             display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,.3);
             border-radius: 50%;
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
@@ -790,18 +788,18 @@
 
         /* رسائل التنبيه */
         .alert {
-            padding: 16px 20px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .alert i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .alert-success {
@@ -828,53 +826,62 @@
             border: 1px solid rgba(67, 97, 238, 0.3);
         }
 
-        /* تحسينات للأجهزة الصغيرة */
-        @media (max-width: 380px) {
-            .quick-stats {
-                grid-template-columns: 1fr;
-            }
-            
+        /* تحسينات للأجهزة الصغيرة جداً */
+        @media (max-width: 350px) {
             .cash-stats {
                 grid-template-columns: 1fr;
+                gap: 5px;
             }
             
-            .app-title {
-                font-size: 1rem;
-                padding: 6px 12px;
+            .quick-stats {
+                gap: 5px;
             }
             
-            .user-name {
-                padding: 6px 12px;
-                font-size: 0.85rem;
-            }
-            
-            .nav-icon {
+            .stat-value {
                 font-size: 1.2rem;
             }
             
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            
+            .app-title {
+                font-size: 0.9rem;
+                padding: 5px 10px;
+            }
+            
+            .user-name {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .nav-icon {
+                font-size: 1.1rem;
+            }
+            
             .nav-item {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
         }
 
         /* رسالة الترحيب */
         .welcome-message {
             background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(67, 97, 238, 0.02) 100%);
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 12px;
             border: 1px solid rgba(67, 97, 238, 0.1);
         }
 
         .welcome-message h3 {
             color: var(--primary);
-            margin-bottom: 5px;
-            font-size: 1.2rem;
+            margin-bottom: 2px;
+            font-size: 1rem;
         }
 
         .welcome-message p {
             color: var(--gray);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
         /* مؤشر التحميل الكبير */
@@ -883,36 +890,23 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 300px;
+            min-height: 250px;
         }
 
         .loading-large .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--gray-light);
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-light);
             border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        /* صندوق البحث */
-        .search-box {
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            padding-right: 45px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
-            background-repeat: no-repeat;
-            background-position: 15px center;
-            background-size: 20px;
+            margin-bottom: 15px;
         }
 
         /* الفلاتر مع زر */
         .filter-with-button {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: flex-end;
         }
 
@@ -923,17 +917,18 @@
 
         .filter-with-button button {
             width: auto;
-            padding: 16px 20px;
-            height: 52px;
+            padding: 14px 16px;
+            height: 48px;
             white-space: nowrap;
+            font-size: 0.9rem;
         }
 
         /* ملخص العهدة */
         .cash-summary {
             background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
             border: 1px solid rgba(241, 196, 15, 0.3);
         }
 
@@ -941,8 +936,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 6px 0;
             border-bottom: 1px solid rgba(241, 196, 15, 0.2);
+            font-size: 0.85rem;
         }
 
         .cash-summary-item:last-child {
@@ -950,14 +946,18 @@
         }
 
         .cash-summary-label {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--gray);
         }
 
         .cash-summary-value {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             color: var(--cash-dark);
+        }
+
+        .cash-summary-value.negative {
+            color: var(--negative);
         }
     </style>
 </head>
@@ -1255,6 +1255,11 @@
             const cashDate = document.getElementById('cashDate');
             if (cashDate && cashDate.value !== today) {
                 cashDate.value = today;
+            }
+            
+            const cashWithdrawalDate = document.getElementById('cashWithdrawalDate');
+            if (cashWithdrawalDate && cashWithdrawalDate.value !== today) {
+                cashWithdrawalDate.value = today;
             }
             
             const filterCashDate = document.getElementById('filterCashDate');
@@ -1771,7 +1776,7 @@
             
             // إحصائيات العهدة
             const cashBalance = calculateCashBalance();
-            const todayCashTransactions = cashTransactions.filter(c => c.date === today && c.supervisorId === currentSupervisor.id);
+            const balanceClass = cashBalance < 0 ? 'negative' : '';
             
             mainContent.innerHTML = `
                 <div class="welcome-message">
@@ -1801,15 +1806,15 @@
                 <div class="cash-stats">
                     <div class="cash-stat-card">
                         <div class="cash-stat-label">رصيد العهدة</div>
-                        <div class="cash-stat-value">${cashBalance} ج.م</div>
+                        <div class="cash-stat-value ${balanceClass}">${cashBalance}</div>
                     </div>
                     <div class="cash-stat-card">
-                        <div class="cash-stat-label">حركات اليوم</div>
-                        <div class="cash-stat-value">${todayCashTransactions.length}</div>
+                        <div class="cash-stat-label">إجمالي الإيداعات</div>
+                        <div class="cash-stat-value">${calculateTotalDeposits()}</div>
                     </div>
                     <div class="cash-stat-card">
-                        <div class="cash-stat-label">إجمالي الحركات</div>
-                        <div class="cash-stat-value">${cashTransactions.length}</div>
+                        <div class="cash-stat-label">إجمالي المصروفات</div>
+                        <div class="cash-stat-value">${calculateTotalWithdrawals()}</div>
                     </div>
                 </div>
                 
@@ -1921,10 +1926,11 @@
                 html += `
                     <div class="list-item">
                         <div class="item-info">
-                            <div class="item-title">${transaction.description || transaction.type}</div>
+                            <div class="item-title">${transaction.reason}</div>
                             <div class="item-subtitle">
                                 <span>${transaction.date}</span>
                                 <span>${transaction.type}</span>
+                                ${transaction.stationName ? `<span class="station-badge">${transaction.stationName}</span>` : ''}
                             </div>
                         </div>
                         <div class="${amountClass}">${amountSign} ${transaction.amount} ج.م</div>
@@ -1945,6 +1951,20 @@
                 }
             });
             return balance;
+        }
+
+        // حساب إجمالي الإيداعات
+        function calculateTotalDeposits() {
+            return cashTransactions
+                .filter(t => t.type === 'إيداع')
+                .reduce((sum, t) => sum + t.amount, 0);
+        }
+
+        // حساب إجمالي المصروفات
+        function calculateTotalWithdrawals() {
+            return cashTransactions
+                .filter(t => t.type === 'صرف')
+                .reduce((sum, t) => sum + t.amount, 0);
         }
 
         // ==================== صفحة تسجيل الحضور ====================
@@ -2640,10 +2660,11 @@
             return html;
         }
 
-        // ==================== صفحة إدارة العهدة ====================
+        // ==================== صفحة إدارة العهدة (معدلة - بدون ديون) ====================
         function showCashPage() {
             const today = getTodayDate();
             const balance = calculateCashBalance();
+            const balanceClass = balance < 0 ? 'negative' : '';
             
             mainContent.innerHTML = `
                 <div class="card">
@@ -2654,7 +2675,7 @@
                         <div class="cash-summary">
                             <div class="cash-summary-item">
                                 <span class="cash-summary-label">الرصيد الحالي:</span>
-                                <span class="cash-summary-value">${balance} ج.م</span>
+                                <span class="cash-summary-value ${balanceClass}">${balance} ج.م</span>
                             </div>
                             <div class="cash-summary-item">
                                 <span class="cash-summary-label">إجمالي الإيداعات:</span>
@@ -2719,7 +2740,7 @@
                                 
                                 <div class="form-group">
                                     <label><i class="fas fa-money-bill"></i> المبلغ (جنيه مصري)</label>
-                                    <input type="number" id="cashWithdrawalAmount" required placeholder="أدخل المبلغ" min="1" max="${balance}">
+                                    <input type="number" id="cashWithdrawalAmount" required placeholder="أدخل المبلغ" min="1">
                                 </div>
                                 
                                 <div class="form-group">
@@ -2740,6 +2761,11 @@
                                 <div class="form-group">
                                     <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
                                     <textarea id="cashWithdrawalNotes" rows="3" placeholder="أدخل ملاحظات (اختياري)"></textarea>
+                                </div>
+                                
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    يمكنك الصرف حتى لو كان الرصيد غير كافٍ - سيظهر الرصيد بالسالب
                                 </div>
                                 
                                 <button type="submit" class="btn-warning">
@@ -2807,20 +2833,6 @@
             });
         }
 
-        // حساب إجمالي الإيداعات
-        function calculateTotalDeposits() {
-            return cashTransactions
-                .filter(t => t.type === 'إيداع')
-                .reduce((sum, t) => sum + t.amount, 0);
-        }
-
-        // حساب إجمالي المصروفات
-        function calculateTotalWithdrawals() {
-            return cashTransactions
-                .filter(t => t.type === 'صرف')
-                .reduce((sum, t) => sum + t.amount, 0);
-        }
-
         // تسجيل إيداع
         function recordCashDeposit(e) {
             e.preventDefault();
@@ -2853,7 +2865,6 @@
                 date,
                 reason,
                 notes: notes || '',
-                description: `إيداع: ${reason}`,
                 timestamp: new Date().toISOString()
             };
             
@@ -2871,24 +2882,9 @@
                     const filterType = document.getElementById('filterCashType').value;
                     document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
                     
-                    // تحديث ملخص العهدة
-                    const balance = calculateCashBalance();
-                    const cashSummary = document.querySelector('.cash-summary');
-                    if (cashSummary) {
-                        cashSummary.innerHTML = `
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">الرصيد الحالي:</span>
-                                <span class="cash-summary-value">${balance} ج.م</span>
-                            </div>
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">إجمالي الإيداعات:</span>
-                                <span class="cash-summary-value">${calculateTotalDeposits()} ج.م</span>
-                            </div>
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">إجمالي المصروفات:</span>
-                                <span class="cash-summary-value">${calculateTotalWithdrawals()} ج.م</span>
-                            </div>
-                        `;
+                    // تحديث الصفحة
+                    if (document.querySelector('.cash-summary')) {
+                        showCashPage();
                     }
                     
                     showTemporaryMessage('تم تسجيل الإيداع بنجاح', 'success');
@@ -2900,7 +2896,7 @@
                 });
         }
 
-        // تسجيل صرف
+        // تسجيل صرف (يسمح بالسحب حتى مع رصيد غير كافٍ)
         function recordCashWithdrawal(e) {
             e.preventDefault();
             
@@ -2926,12 +2922,6 @@
                 return;
             }
             
-            const balance = calculateCashBalance();
-            if (amount > balance) {
-                showTemporaryMessage('المبلغ المطلوب أكبر من الرصيد المتوفر', 'error');
-                return;
-            }
-            
             const submitBtn = document.getElementById('cashWithdrawalSubmitText');
             submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
             
@@ -2945,7 +2935,6 @@
                 reason,
                 recipient,
                 notes: notes || '',
-                description: `صرف: ${reason} - المستلم: ${recipient}`,
                 timestamp: new Date().toISOString()
             };
             
@@ -2963,27 +2952,18 @@
                     const filterType = document.getElementById('filterCashType').value;
                     document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
                     
-                    // تحديث ملخص العهدة
-                    const balance = calculateCashBalance();
-                    const cashSummary = document.querySelector('.cash-summary');
-                    if (cashSummary) {
-                        cashSummary.innerHTML = `
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">الرصيد الحالي:</span>
-                                <span class="cash-summary-value">${balance} ج.م</span>
-                            </div>
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">إجمالي الإيداعات:</span>
-                                <span class="cash-summary-value">${calculateTotalDeposits()} ج.م</span>
-                            </div>
-                            <div class="cash-summary-item">
-                                <span class="cash-summary-label">إجمالي المصروفات:</span>
-                                <span class="cash-summary-value">${calculateTotalWithdrawals()} ج.م</span>
-                            </div>
-                        `;
+                    // تحديث الصفحة
+                    if (document.querySelector('.cash-summary')) {
+                        showCashPage();
                     }
                     
-                    showTemporaryMessage('تم تسجيل الصرف بنجاح', 'success');
+                    // تحذير إذا أصبح الرصيد سالباً
+                    const newBalance = calculateCashBalance() - amount;
+                    if (newBalance < 0) {
+                        showTemporaryMessage('تم التسجيل بنجاح - الرصيد أصبح سالباً', 'warning');
+                    } else {
+                        showTemporaryMessage('تم تسجيل الصرف بنجاح', 'success');
+                    }
                 })
                 .catch(error => {
                     submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
@@ -3017,20 +2997,20 @@
                 
                 let details = '';
                 if (transaction.type === 'إيداع') {
-                    details = `سبب الإيداع: ${transaction.reason || transaction.description || ''}`;
+                    details = `سبب الإيداع: ${transaction.reason}`;
                 } else {
-                    details = `سبب الصرف: ${transaction.reason || ''} - المستلم: ${transaction.recipient || ''}`;
+                    details = `سبب الصرف: ${transaction.reason} - المستلم: ${transaction.recipient}`;
                 }
                 
                 html += `
                     <div class="list-item">
                         <div class="item-info">
-                            <div class="item-title">${transaction.type} - ${transaction.amount} ج.م</div>
+                            <div class="item-title">${details}</div>
                             <div class="item-subtitle">
                                 <span>${transaction.date}</span>
+                                <span>${transaction.type}</span>
                                 ${transaction.stationName ? `<span class="station-badge">${transaction.stationName}</span>` : ''}
                             </div>
-                            <div class="item-subtitle">${details}</div>
                             ${transaction.notes ? `<div class="item-subtitle">ملاحظات: ${transaction.notes}</div>` : ''}
                         </div>
                         <div class="${amountClass}">${amountSign} ${transaction.amount} ج.م</div>
@@ -3045,14 +3025,19 @@
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
             alertDiv.style.position = 'fixed';
-            alertDiv.style.top = '80px';
+            alertDiv.style.top = '60px';
             alertDiv.style.right = '15px';
             alertDiv.style.left = '15px';
             alertDiv.style.maxWidth = '400px';
             alertDiv.style.margin = '0 auto';
             alertDiv.style.zIndex = '1000';
-            alertDiv.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
-            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'}"></i> ${message}`;
+            alertDiv.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+            
+            let icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            else if (type === 'warning') icon = 'exclamation-triangle';
+            
+            alertDiv.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
             
             document.body.appendChild(alertDiv);
             
