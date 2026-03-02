@@ -14,7 +14,7 @@
         &quot;display&quot;: &quot;standalone&quot;,
         &quot;orientation&quot;: &quot;portrait&quot;,
         &quot;background_color&quot;: &quot;#4361ee&quot;,
-        &quot;theme_color&quot; &quot;: &quot;#4361ee&quot;,
+        &quot;theme_color&quot;: &quot;#4361ee&quot;,
         &quot;dir&quot;: &quot;rtl&quot;,
         &quot;lang&quot;: &quot;ar&quot;,
         &quot;icons&quot;: [
@@ -495,7 +495,6 @@
             padding: 15px;
         }
 
-        /* أنماط التبويبات */
         .mode-tabs {
             display: flex;
             gap: 10px;
@@ -1119,6 +1118,52 @@
             background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
             color: white;
         }
+        
+        .refresh-indicator {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .refresh-indicator.show {
+            display: flex;
+        }
+        
+        .refresh-indicator i {
+            font-size: 1rem;
+        }
+        
+        .selected-station-info {
+            background: var(--light);
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .selected-station-info i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .selected-station-info span {
+            font-weight: 600;
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -1201,6 +1246,12 @@
         <div class="connection-status" id="connectionStatus">
             <i class="fas fa-wifi"></i> متصل بقاعدة البيانات
         </div>
+        
+        <!-- مؤشر التحديث -->
+        <div class="refresh-indicator" id="refreshIndicator">
+            <i class="fas fa-sync-alt fa-spin"></i>
+            <span>جاري تحديث البيانات...</span>
+        </div>
 
         <!-- المحتوى الرئيسي -->
         <main class="main-content" id="mainContent">
@@ -1275,6 +1326,7 @@
         let currentAttendanceTab = 'present';
         let selectedEmployees = [];
         let currentMode = 'single'; // 'single' or 'bulk'
+        let singleAttendanceType = 'present';
 
         // متغيرات PWA
         let deferredPrompt;
@@ -1298,6 +1350,70 @@
         const pageTitle = document.getElementById('pageTitle');
         const connectionStatus = document.getElementById('connectionStatus');
         const rememberMeCheckbox = document.getElementById('rememberMe');
+        const refreshIndicator = document.getElementById('refreshIndicator');
+
+        // ==================== دوال التحديث ====================
+        
+        // إظهار مؤشر التحديث
+        function showRefreshIndicator() {
+            refreshIndicator.classList.add('show');
+        }
+        
+        // إخفاء مؤشر التحديث
+        function hideRefreshIndicator() {
+            refreshIndicator.classList.remove('show');
+        }
+        
+        // تحديث جميع البيانات من Firebase
+        function refreshAllData() {
+            showRefreshIndicator();
+            
+            Promise.all([
+                loadData('employees', true),
+                loadData('stations', true),
+                loadData('attendance', true),
+                loadData('leaves', true),
+                loadData('faults', true),
+                loadData('financials', true),
+                loadData('cashTransactions', true),
+                loadData('customEmployeeLists', true)
+            ]).then(() => {
+                hideRefreshIndicator();
+                showTemporaryMessage('تم تحديث البيانات بنجاح', 'success');
+                
+                // إعادة تحميل الصفحة الحالية
+                const currentPage = document.querySelector('.nav-item.active').getAttribute('data-page');
+                showPage(currentPage);
+            }).catch(error => {
+                hideRefreshIndicator();
+                console.error('خطأ في تحديث البيانات:', error);
+                showTemporaryMessage('حدث خطأ في تحديث البيانات', 'error');
+            });
+        }
+        
+        // إضافة مستمعي التحديث لجميع الأزرار
+        function addRefreshListeners() {
+            // مراقبة جميع الأزرار في الصفحة
+            document.querySelectorAll('button').forEach(button => {
+                // تجنب إضافة المستمع للأزرار التي قد تسبب تكرار
+                if (!button.hasAttribute('data-refresh-listener')) {
+                    button.setAttribute('data-refresh-listener', 'true');
+                    
+                    // حفظ معالج الحدث الأصلي
+                    const originalClick = button.onclick;
+                    
+                    button.addEventListener('click', function(e) {
+                        // إذا كان الزر ليس زر تسجيل خروج وليس في شاشة الدخول
+                        if (this.id !== 'logoutBtn' && !this.closest('.login-container')) {
+                            // تأخير التحديث قليلاً للسماح بإكمال العملية
+                            setTimeout(() => {
+                                refreshAllData();
+                            }, 500);
+                        }
+                    });
+                }
+            });
+        }
 
         // ==================== دوال المساعدة ====================
 
@@ -1667,6 +1783,9 @@
                     showEmployeesSettingsPage();
                     break;
             }
+            
+            // إضافة مستمعي التحديث بعد تحميل الصفحة
+            setTimeout(addRefreshListeners, 500);
         }
 
         function getIconForPage(page) {
@@ -1697,6 +1816,9 @@
                 showLoading(false);
                 showDashboard();
                 showConnectionStatus('تم تحميل البيانات بنجاح', 'success');
+                
+                // إضافة مستمعي التحديث
+                setTimeout(addRefreshListeners, 500);
             }).catch(error => {
                 console.error('خطأ في تحميل البيانات:', error);
                 showLoading(false);
@@ -1704,7 +1826,7 @@
             });
         }
 
-        function loadData(dataType) {
+        function loadData(dataType, silent = false) {
             return new Promise((resolve, reject) => {
                 database.ref(dataType).once('value')
                     .then((snapshot) => {
@@ -2089,8 +2211,21 @@
             selectedPresentEmployees = [];
             selectedLeaveEmployees = [];
             currentAttendanceTab = 'present';
-            selectedStation = '';
             currentMode = 'single';
+            singleAttendanceType = 'present';
+            
+            // الحفاظ على المحطة المختارة إذا كانت موجودة
+            if (selectedStation) {
+                // تحديث قيمة select
+                setTimeout(() => {
+                    const stationSelect = document.getElementById('attendanceStationSelect');
+                    if (stationSelect) {
+                        stationSelect.value = selectedStation;
+                    }
+                }, 100);
+            } else {
+                selectedStation = '';
+            }
             
             mainContent.innerHTML = `
                 <div class="card">
@@ -2113,7 +2248,7 @@
                             <label><i class="fas fa-building"></i> اختر المحطة</label>
                             <select id="attendanceStationSelect" onchange="onStationChange()">
                                 <option value="">-- اختر المحطة --</option>
-                                ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
+                                ${stations.map(s => `<option value="${s.name}" ${selectedStation === s.name ? 'selected' : ''}>${s.name}</option>`).join('')}
                             </select>
                         </div>
                         
@@ -2121,6 +2256,14 @@
                             <label><i class="fas fa-calendar"></i> التاريخ</label>
                             <input type="date" id="attendanceDate" value="${today}" min="${today}" required>
                         </div>
+                        
+                        <!-- عرض المحطة المختارة -->
+                        ${selectedStation ? `
+                        <div class="selected-station-info">
+                            <i class="fas fa-check-circle"></i>
+                            <span>المحطة المختارة: ${selectedStation}</span>
+                        </div>
+                        ` : ''}
                         
                         <!-- قسم التسجيل المفرد -->
                         <div id="singleModeSection" style="display: block;">
@@ -2238,7 +2381,7 @@
                 document.getElementById('singleModeSection').style.display = 'none';
                 document.getElementById('bulkModeSection').style.display = 'block';
                 
-                // إعادة تحميل قوائم الموظفين للتسجيل بالجملة
+                // إعادة تحميل قوائم الموظفين للتسجيل بالجملة مع الحفاظ على المحطة المختارة
                 if (selectedStation) {
                     if (currentAttendanceTab === 'present') {
                         document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
@@ -2267,7 +2410,6 @@
         }
 
         // تحديد نوع الحضور في التسجيل المفرد
-        let singleAttendanceType = 'present';
         window.setSingleAttendanceType = function(type) {
             singleAttendanceType = type;
             
@@ -2336,6 +2478,9 @@
                     document.getElementById('todayAttendanceList').innerHTML = displayTodayAttendance();
                     
                     showTemporaryMessage(`تم تسجيل ${employeeName} بنجاح`, 'success');
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     saveBtn.innerHTML = originalText;
@@ -2357,6 +2502,12 @@
                     document.getElementById('leaveEmployeesList').innerHTML = '<div class="empty-state"><i class="fas fa-building"></i>يرجى اختيار محطة أولاً</div>';
                 }
                 return;
+            }
+            
+            // تحديث عرض المحطة المختارة
+            const stationInfo = document.querySelector('.selected-station-info');
+            if (stationInfo) {
+                stationInfo.querySelector('span').textContent = `المحطة المختارة: ${selectedStation}`;
             }
             
             if (currentMode === 'single') {
@@ -2418,7 +2569,7 @@
             return html;
         }
 
-        // تبديل علامة التبويب (للتسجيل بالجملة)
+        // تبديل علامة التبويب (للتسجيل بالجملة) - معدلة للحفاظ على المحطة
         window.switchAttendanceTab = function(tab) {
             currentAttendanceTab = tab;
             
@@ -2427,10 +2578,20 @@
                 document.querySelector('#bulkModeSection .attendance-tab.present').classList.add('active');
                 document.getElementById('presentSection').style.display = 'block';
                 document.getElementById('leaveSection').style.display = 'none';
+                
+                // إعادة تحميل قائمة الحضور مع الحفاظ على المحطة
+                if (selectedStation) {
+                    document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
+                }
             } else {
                 document.querySelector('#bulkModeSection .attendance-tab.leave').classList.add('active');
                 document.getElementById('presentSection').style.display = 'none';
                 document.getElementById('leaveSection').style.display = 'block';
+                
+                // إعادة تحميل قائمة الإجازات مع الحفاظ على المحطة
+                if (selectedStation) {
+                    document.getElementById('leaveEmployeesList').innerHTML = displayEmployeesForAttendance('leave');
+                }
             }
         };
 
@@ -2595,7 +2756,7 @@
                 document.querySelector('#presentSection .btn-success') : 
                 document.querySelector('#leaveSection .btn-warning');
             const originalText = saveBtn.innerHTML;
-            saveBtn.innerHTML = '<div class="loading"></div> جاري الحفظ...';
+            saveBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
             
             // حفظ كل موظف مع المحطة المختارة
             const promises = selectedEmployees.map(employeeName => {
@@ -2629,7 +2790,7 @@
                         document.getElementById('leaveCount').textContent = '0 موظف مختار للإجازة';
                     }
                     
-                    // إعادة عرض القوائم
+                    // إعادة عرض القوائم مع الحفاظ على المحطة
                     if (type === 'present') {
                         document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
                     } else {
@@ -2640,6 +2801,9 @@
                     document.getElementById('todayAttendanceList').innerHTML = displayTodayAttendance();
                     
                     showTemporaryMessage(`تم تسجيل ${selectedEmployees.length} موظف بنجاح في محطة ${selectedStation}`, 'success');
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     saveBtn.innerHTML = originalText;
@@ -2898,6 +3062,9 @@
                 document.getElementById('customListsContainer').innerHTML = displayCustomLists();
                 
                 showTemporaryMessage(`تم حفظ قائمة محطة ${stationName} بنجاح`, 'success');
+                
+                // تحديث البيانات
+                refreshAllData();
             }).catch(error => {
                 saveBtn.innerHTML = originalText;
                 console.error(error);
@@ -2947,6 +3114,9 @@
                     .then(() => {
                         document.getElementById('customListsContainer').innerHTML = displayCustomLists();
                         showTemporaryMessage('تم حذف القائمة بنجاح', 'success');
+                        
+                        // تحديث البيانات
+                        refreshAllData();
                     })
                     .catch(error => {
                         console.error('خطأ في حذف القائمة:', error);
@@ -3084,6 +3254,9 @@
                     
                     const filterStatus = document.getElementById('filterFaultStatus').value;
                     document.getElementById('faultsList').innerHTML = displayMyFaults(filterStatus);
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
@@ -3273,6 +3446,9 @@
                     const filterDate = document.getElementById('filterFinancialDate').value;
                     document.getElementById('financialList').innerHTML = displayMyFinancials(filterDate);
                     showTemporaryMessage('تم تسجيل الحركة بنجاح', 'success');
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
@@ -3535,6 +3711,9 @@
                     showCashPage();
                     
                     showTemporaryMessage('تم تسجيل الإيداع بنجاح', 'success');
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
@@ -3606,6 +3785,9 @@
                     } else {
                         showTemporaryMessage('تم تسجيل الصرف بنجاح', 'success');
                     }
+                    
+                    // تحديث البيانات
+                    refreshAllData();
                 })
                 .catch(error => {
                     submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
