@@ -14,7 +14,7 @@
         &quot;display&quot;: &quot;standalone&quot;,
         &quot;orientation&quot;: &quot;portrait&quot;,
         &quot;background_color&quot;: &quot;#4361ee&quot;,
-        &quot;theme_color&quot;: &quot;#4361ee&quot;,
+        &quot;theme_color&quot; &quot;: &quot;#4361ee&quot;,
         &quot;dir&quot;: &quot;rtl&quot;,
         &quot;lang&quot;: &quot;ar&quot;,
         &quot;icons&quot;: [
@@ -81,7 +81,6 @@
             margin: 0;
         }
 
-        /* رسالة تثبيت التطبيق */
         .install-prompt {
             background: white;
             border-radius: 20px;
@@ -168,7 +167,6 @@
             transform: translateY(-2px);
         }
 
-        /* شاشة تسجيل الدخول */
         .login-container {
             background: white;
             border-radius: 30px;
@@ -308,6 +306,11 @@
             box-shadow: 0 8px 15px rgba(108, 117, 125, 0.3);
         }
 
+        .btn-settings {
+            background: linear-gradient(135deg, #9c88ff 0%, #8c7ae6 100%);
+            box-shadow: 0 8px 15px rgba(156, 136, 255, 0.3);
+        }
+
         .error-message {
             background: rgba(239, 71, 111, 0.1);
             color: var(--danger);
@@ -323,7 +326,6 @@
             margin-left: 8px;
         }
 
-        /* التطبيق الرئيسي */
         .app-container {
             background: #f5f7fa;
             min-height: 100vh;
@@ -337,7 +339,6 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
 
-        /* الهيدر - مصغر */
         .app-header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -416,7 +417,6 @@
             box-shadow: none;
         }
 
-        /* شريط التنقل السفلي */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -459,7 +459,6 @@
             margin-bottom: 2px;
         }
 
-        /* المحتوى الرئيسي */
         .main-content {
             padding: 15px 12px;
             padding-bottom: 80px;
@@ -467,7 +466,6 @@
             max-height: calc(100vh - 100px);
         }
 
-        /* البطاقات */
         .card {
             background: white;
             border-radius: 18px;
@@ -497,7 +495,55 @@
             padding: 15px;
         }
 
-        /* إحصائيات سريعة - مصفوفة من عمودين */
+        /* أنماط التبويبات */
+        .mode-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-tab {
+            flex: 1;
+            padding: 12px;
+            background: var(--light);
+            border: 2px solid var(--gray-light);
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--gray);
+        }
+
+        .mode-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .mode-tab i {
+            margin-left: 5px;
+        }
+
+        .mode-tab.single {
+            color: var(--primary);
+        }
+
+        .mode-tab.single.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .mode-tab.bulk {
+            color: var(--success);
+        }
+
+        .mode-tab.bulk.active {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
         .quick-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -540,7 +586,6 @@
             font-weight: 500;
         }
 
-        /* إحصائيات العهدة - مصفوفة من 3 أعمدة */
         .cash-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -576,7 +621,6 @@
             font-weight: 500;
         }
 
-        /* تبويبات العهدة */
         .cash-tabs {
             display: flex;
             border-bottom: 2px solid var(--gray-light);
@@ -609,7 +653,6 @@
             display: block;
         }
 
-        /* قائمة العناصر */
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -662,7 +705,6 @@
             display: block;
         }
 
-        /* حالة الحضور */
         .status-present {
             color: var(--success);
             font-weight: 600;
@@ -690,7 +732,6 @@
             font-size: 0.8rem;
         }
 
-        /* حالة العهدة */
         .cash-positive {
             color: var(--success);
             font-weight: 600;
@@ -709,7 +750,6 @@
             font-size: 0.8rem;
         }
 
-        /* الفلاتر */
         .filter-section {
             background: var(--light);
             padding: 12px;
@@ -722,7 +762,6 @@
             margin-bottom: 0;
         }
 
-        /* شارة المحطة */
         .station-badge {
             display: inline-block;
             padding: 3px 10px;
@@ -733,7 +772,6 @@
             font-weight: 500;
         }
 
-        /* شارة واتساب */
         .whatsapp-badge {
             display: inline-flex;
             align-items: center;
@@ -751,7 +789,6 @@
             color: var(--whatsapp);
         }
 
-        /* حالة الاتصال */
         .connection-status {
             position: fixed;
             top: 60px;
@@ -771,7 +808,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* مؤشر التحميل */
         .loading {
             display: inline-block;
             width: 20px;
@@ -786,7 +822,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* رسائل التنبيه */
         .alert {
             padding: 12px 15px;
             border-radius: 14px;
@@ -826,7 +861,6 @@
             border: 1px solid rgba(67, 97, 238, 0.3);
         }
 
-        /* تحسينات للأجهزة الصغيرة جداً */
         @media (max-width: 350px) {
             .cash-stats {
                 grid-template-columns: 1fr;
@@ -864,7 +898,6 @@
             }
         }
 
-        /* رسالة الترحيب */
         .welcome-message {
             background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(67, 97, 238, 0.02) 100%);
             padding: 12px;
@@ -884,7 +917,6 @@
             font-size: 0.85rem;
         }
 
-        /* مؤشر التحميل الكبير */
         .loading-large {
             display: flex;
             flex-direction: column;
@@ -903,7 +935,6 @@
             margin-bottom: 15px;
         }
 
-        /* الفلاتر مع زر */
         .filter-with-button {
             display: flex;
             gap: 8px;
@@ -923,7 +954,6 @@
             font-size: 0.9rem;
         }
 
-        /* ملخص العهدة */
         .cash-summary {
             background: linear-gradient(135deg, rgba(241, 196, 15, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%);
             border-radius: 14px;
@@ -958,6 +988,136 @@
 
         .cash-summary-value.negative {
             color: var(--negative);
+        }
+
+        .employees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .employee-card {
+            background: white;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .employee-card.selected {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(67, 97, 238, 0.05) 100%);
+            border-color: var(--primary);
+            border-width: 2px;
+        }
+        
+        .employee-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .employee-card.star-employee {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.05);
+        }
+        
+        .employee-card .employee-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 0.85rem;
+        }
+        
+        .employee-card .employee-station {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+        
+        .employee-card i.star-icon {
+            color: #f1c40f;
+            font-size: 0.8rem;
+            margin-left: 3px;
+        }
+
+        .selected-count {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        .attendance-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .attendance-tab {
+            flex: 1;
+            padding: 10px;
+            background: var(--light);
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+
+        .attendance-tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .attendance-tab.present {
+            color: var(--success);
+        }
+
+        .attendance-tab.present.active {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+            color: white;
+        }
+
+        .attendance-tab.leave.active {
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            color: white;
         }
     </style>
 </head>
@@ -1057,10 +1217,6 @@
                 <div class="nav-icon"><i class="fas fa-user-check"></i></div>
                 <div class="nav-text">الحضور</div>
             </div>
-            <div class="nav-item" data-page="leaves">
-                <div class="nav-icon"><i class="fas fa-umbrella-beach"></i></div>
-                <div class="nav-text">الإجازات</div>
-            </div>
             <div class="nav-item" data-page="faults">
                 <div class="nav-icon"><i class="fas fa-exclamation-triangle"></i></div>
                 <div class="nav-text">الأعطال</div>
@@ -1073,15 +1229,19 @@
                 <div class="nav-icon"><i class="fas fa-wallet"></i></div>
                 <div class="nav-text">العهدة</div>
             </div>
+            <div class="nav-item" data-page="employees">
+                <div class="nav-icon"><i class="fas fa-users-cog"></i></div>
+                <div class="nav-text">إعدادات الموظفين</div>
+            </div>
         </nav>
     </div>
 
     <script>
         // رقم المدير العام للصيانة (واتساب)
-        const MANAGER_PHONE = "201555153901"; // بدون + وبدون صفر في البداية للواتساب
+        const MANAGER_PHONE = "201555153901";
         const MANAGER_DISPLAY_PHONE = "+20 15 55153901";
 
-        // تهيئة Firebase بنفس إعدادات التطبيق الرئيسي
+        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDjImFc52SF5TlN7k7vz0H6-8bWl8Pkz0k",
             authDomain: "haat-a88ee.firebaseapp.com",
@@ -1105,9 +1265,16 @@
         let leaves = [];
         let faults = [];
         let financials = [];
-        let cashTransactions = []; // بيانات العهدة
+        let cashTransactions = [];
+        let customEmployeeLists = [];
         let isConnected = false;
         let autoRefreshInterval = null;
+        let selectedStation = '';
+        let selectedPresentEmployees = [];
+        let selectedLeaveEmployees = [];
+        let currentAttendanceTab = 'present';
+        let selectedEmployees = [];
+        let currentMode = 'single'; // 'single' or 'bulk'
 
         // متغيرات PWA
         let deferredPrompt;
@@ -1132,21 +1299,52 @@
         const connectionStatus = document.getElementById('connectionStatus');
         const rememberMeCheckbox = document.getElementById('rememberMe');
 
-        // ==================== كود PWA للتثبيت على الشاشة الرئيسية ====================
+        // ==================== دوال المساعدة ====================
 
-        // التحقق مما إذا كان التطبيق مثبتاً بالفعل
+        function getTodayDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getCurrentMonth() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        }
+
+        function checkExistingRecord(employeeName, date) {
+            return attendance.some(record => record.employeeName === employeeName && record.date === date);
+        }
+
+        function getCustomListsForCurrentSupervisor() {
+            if (!currentSupervisor) return [];
+            return customEmployeeLists.filter(list => list.supervisorId === currentSupervisor.id);
+        }
+
+        function getCustomEmployeesForStation(stationName) {
+            if (!currentSupervisor || !stationName) return [];
+            const stationList = customEmployeeLists.find(list => 
+                list.supervisorId === currentSupervisor.id && list.stationName === stationName
+            );
+            return stationList ? stationList.employees : [];
+        }
+
+        // ==================== كود PWA ====================
+
         function isAppInstalled() {
             return window.matchMedia('(display-mode: standalone)').matches || 
                    window.navigator.standalone === true ||
                    document.referrer.includes('android-app://');
         }
 
-        // إظهار رسالة التثبيت إذا كان التطبيق غير مثبت والمتصفح يدعم PWA
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             
-            // إظهار رسالة التثبيت إذا لم يكن التطبيق مثبتاً
             if (!isAppInstalled() && !localStorage.getItem('installPromptClosed')) {
                 setTimeout(() => {
                     installPrompt.classList.add('show');
@@ -1154,7 +1352,6 @@
             }
         });
 
-        // تثبيت التطبيق
         installAppBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
                 showTemporaryMessage('التثبيت غير متاح حالياً', 'error');
@@ -1174,16 +1371,13 @@
             deferredPrompt = null;
         });
 
-        // إغلاق رسالة التثبيت
         closeInstallBtn.addEventListener('click', () => {
             installPrompt.classList.remove('show');
             localStorage.setItem('installPromptClosed', 'true');
         });
 
-        // إظهار رسالة التثبيت عند فتح التطبيق من المتصفح
         document.addEventListener('DOMContentLoaded', () => {
             if (!isAppInstalled() && !localStorage.getItem('installPromptClosed') && !localStorage.getItem('appInstalled')) {
-                // انتظر 3 ثواني ثم أظهر الرسالة
                 setTimeout(() => {
                     if (deferredPrompt) {
                         installPrompt.classList.add('show');
@@ -1196,88 +1390,31 @@
             startAutoDateRefresh();
         });
 
-        // بدء التحديث التلقائي للتاريخ
         function startAutoDateRefresh() {
-            // التحقق كل دقيقة إذا كان التاريخ الحالي مختلف عن التاريخ المعروض
             autoRefreshInterval = setInterval(() => {
                 if (appContainer.style.display === 'block' && currentSupervisor) {
-                    // تحديث التواريخ في الصفحات المفتوحة
                     updateDatesInCurrentPage();
                 }
-            }, 60000); // كل دقيقة
+            }, 60000);
         }
 
-        // تحديث التواريخ في الصفحة الحالية
         function updateDatesInCurrentPage() {
             const today = getTodayDate();
             
-            // تحديث حقل التاريخ في نموذج الحضور إذا كان موجوداً
-            const attendanceDate = document.getElementById('attendanceDate');
-            if (attendanceDate && attendanceDate.value !== today) {
-                attendanceDate.value = today;
-            }
+            const dateFields = [
+                'attendanceDate', 'faultDate', 
+                'financialDate', 'filterFinancialDate',
+                'cashDate', 'cashWithdrawalDate', 'filterCashDate'
+            ];
             
-            // تحديث حقل التاريخ في فلتر الحضور
-            const filterAttendanceDate = document.getElementById('filterAttendanceDate');
-            if (filterAttendanceDate && filterAttendanceDate.value !== today) {
-                filterAttendanceDate.value = today;
-            }
-            
-            // تحديث حقل التاريخ في نموذج الأعطال
-            const faultDate = document.getElementById('faultDate');
-            if (faultDate && faultDate.value !== today) {
-                faultDate.value = today;
-            }
-            
-            // تحديث حقل التاريخ في نموذج الإجازات
-            const leaveStart = document.getElementById('leaveStart');
-            if (leaveStart && leaveStart.value !== today) {
-                leaveStart.value = today;
-            }
-            
-            const leaveEnd = document.getElementById('leaveEnd');
-            if (leaveEnd && leaveEnd.value !== today) {
-                leaveEnd.value = today;
-            }
-            
-            // تحديث حقل التاريخ في نموذج الحركات المالية
-            const financialDate = document.getElementById('financialDate');
-            if (financialDate && financialDate.value !== today) {
-                financialDate.value = today;
-            }
-            
-            const filterFinancialDate = document.getElementById('filterFinancialDate');
-            if (filterFinancialDate && filterFinancialDate.value !== today) {
-                filterFinancialDate.value = today;
-            }
-            
-            // تحديث حقول التاريخ في صفحة العهدة
-            const cashDate = document.getElementById('cashDate');
-            if (cashDate && cashDate.value !== today) {
-                cashDate.value = today;
-            }
-            
-            const cashWithdrawalDate = document.getElementById('cashWithdrawalDate');
-            if (cashWithdrawalDate && cashWithdrawalDate.value !== today) {
-                cashWithdrawalDate.value = today;
-            }
-            
-            const filterCashDate = document.getElementById('filterCashDate');
-            if (filterCashDate && filterCashDate.value !== today) {
-                filterCashDate.value = today;
-            }
+            dateFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && field.value !== today && field.type === 'date') {
+                    field.value = today;
+                }
+            });
         }
 
-        // الحصول على تاريخ اليوم بصيغة YYYY-MM-DD
-        function getTodayDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        // التحقق من وجود جلسة سابقة
         function checkSavedSession() {
             const savedSession = localStorage.getItem('attendance_supervisor_session');
             
@@ -1285,12 +1422,9 @@
                 try {
                     const sessionData = JSON.parse(savedSession);
                     
-                    // التحقق من أن الجلسة لم تنته (صلاحية غير محدودة)
                     if (sessionData.supervisorId && sessionData.supervisorName) {
-                        // عرض شاشة التحميل
                         showLoading(true);
                         
-                        // تحميل المسؤولين أولاً
                         database.ref('supervisors').once('value')
                             .then((snapshot) => {
                                 const data = snapshot.val();
@@ -1302,21 +1436,16 @@
                                     const supervisor = supervisors.find(s => s.id === sessionData.supervisorId);
                                     
                                     if (supervisor && supervisor.active) {
-                                        // استعادة الجلسة
                                         currentSupervisor = supervisor;
                                         currentUserName.textContent = supervisor.employeeName;
                                         
-                                        // إخفاء شاشة الدخول وإظهار التطبيق
                                         loginScreen.style.display = 'none';
                                         appContainer.style.display = 'block';
                                         
-                                        // تحميل البيانات
                                         loadAllData();
                                         
-                                        // إظهار رسالة ترحيب
                                         showTemporaryMessage(`مرحباً بعودتك ${supervisor.employeeName}`, 'success');
                                     } else {
-                                        // المسؤول غير موجود أو غير نشط
                                         localStorage.removeItem('attendance_supervisor_session');
                                         showLoading(false);
                                     }
@@ -1341,7 +1470,6 @@
             }
         }
 
-        // حفظ الجلسة
         function saveSession(supervisor, remember = true) {
             if (remember) {
                 const sessionData = {
@@ -1351,7 +1479,6 @@
                 };
                 localStorage.setItem('attendance_supervisor_session', JSON.stringify(sessionData));
             } else {
-                // استخدام sessionStorage بدلاً من localStorage (ينتهي عند إغلاق المتصفح)
                 const sessionData = {
                     supervisorId: supervisor.id,
                     supervisorName: supervisor.employeeName,
@@ -1361,7 +1488,6 @@
             }
         }
 
-        // مراقبة حالة الاتصال
         function monitorConnection() {
             const connectedRef = firebase.database().ref(".info/connected");
             connectedRef.on("value", function(snap) {
@@ -1388,7 +1514,6 @@
             }
         }
 
-        // تحميل قائمة المسؤولين من Firebase
         function loadSupervisors() {
             database.ref('supervisors').once('value')
                 .then((snapshot) => {
@@ -1406,7 +1531,6 @@
                 });
         }
 
-        // تعبئة قائمة المسؤولين في شاشة الدخول
         function populateSupervisorSelect() {
             supervisorSelect.innerHTML = '<option value="">اختر اسمك من القائمة</option>';
             
@@ -1431,7 +1555,6 @@
             });
         }
 
-        // تسجيل الدخول
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -1447,28 +1570,22 @@
             const supervisor = supervisors.find(s => s.id === supervisorId);
             
             if (supervisor && supervisor.password === password) {
-                // تسجيل الدخول ناجح
                 currentSupervisor = supervisor;
                 currentUserName.textContent = supervisor.employeeName;
                 
-                // حفظ الجلسة
                 saveSession(supervisor, rememberMe);
                 
-                // إخفاء شاشة الدخول وإظهار التطبيق
                 loginScreen.style.display = 'none';
                 appContainer.style.display = 'block';
                 
-                // تحميل البيانات الضرورية
                 loadAllData();
                 
-                // إظهار رسالة ترحيب
                 showTemporaryMessage(`مرحباً ${supervisor.employeeName}`, 'success');
             } else {
                 showLoginError('اسم المسؤول أو كلمة السر غير صحيحة');
             }
         });
 
-        // إظهار خطأ تسجيل الدخول
         function showLoginError(message) {
             document.getElementById('errorText').textContent = message;
             loginError.style.display = 'block';
@@ -1480,7 +1597,6 @@
             }, 3000);
         }
 
-        // إضافة تأثير الاهتزاز
         const style = document.createElement('style');
         style.textContent = `
             @keyframes shake {
@@ -1491,9 +1607,7 @@
         `;
         document.head.appendChild(style);
 
-        // تسجيل الخروج
         logoutBtn.addEventListener('click', function() {
-            // حذف الجلسة من جميع التخزينات
             localStorage.removeItem('attendance_supervisor_session');
             sessionStorage.removeItem('attendance_supervisor_session');
             
@@ -1505,35 +1619,30 @@
             supervisorSelect.value = '';
             supervisorPassword.value = '';
             
-            // إيقاف التحديث التلقائي
             if (autoRefreshInterval) {
                 clearInterval(autoRefreshInterval);
             }
         });
 
-        // التنقل بين الصفحات
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
                 const page = this.getAttribute('data-page');
                 
-                // تحديث النشط
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
                 
-                // عرض الصفحة المناسبة
                 showPage(page);
             });
         });
 
-        // عرض الصفحة المحددة
         function showPage(page) {
             const titles = {
                 'dashboard': 'الرئيسية',
                 'attendance': 'تسجيل الحضور',
-                'leaves': 'إدارة الإجازات',
                 'faults': 'تسجيل الأعطال',
                 'financial': 'السلف والمكافآت',
-                'cash': 'إدارة العهدة'
+                'cash': 'إدارة العهدة',
+                'employees': 'إعدادات الموظفين'
             };
             
             pageTitle.innerHTML = `<i class="fas fa-${getIconForPage(page)}"></i> <span>${titles[page]}</span>`;
@@ -1545,9 +1654,6 @@
                 case 'attendance':
                     showAttendancePage();
                     break;
-                case 'leaves':
-                    showLeavesPage();
-                    break;
                 case 'faults':
                     showFaultsPage();
                     break;
@@ -1557,6 +1663,9 @@
                 case 'cash':
                     showCashPage();
                     break;
+                case 'employees':
+                    showEmployeesSettingsPage();
+                    break;
             }
         }
 
@@ -1564,15 +1673,14 @@
             const icons = {
                 'dashboard': 'home',
                 'attendance': 'user-check',
-                'leaves': 'umbrella-beach',
                 'faults': 'exclamation-triangle',
                 'financial': 'hand-holding-usd',
-                'cash': 'wallet'
+                'cash': 'wallet',
+                'employees': 'users-cog'
             };
             return icons[page];
         }
 
-        // تحميل جميع البيانات
         function loadAllData() {
             showLoading(true);
             
@@ -1583,7 +1691,8 @@
                 loadData('leaves'),
                 loadData('faults'),
                 loadData('financials'),
-                loadData('cashTransactions') // تحميل بيانات العهدة
+                loadData('cashTransactions'),
+                loadData('customEmployeeLists')
             ]).then(() => {
                 showLoading(false);
                 showDashboard();
@@ -1595,7 +1704,6 @@
             });
         }
 
-        // تحميل بيانات من Firebase
         function loadData(dataType) {
             return new Promise((resolve, reject) => {
                 database.ref(dataType).once('value')
@@ -1613,6 +1721,7 @@
                             else if (dataType === 'faults') faults = dataArray;
                             else if (dataType === 'financials') financials = dataArray;
                             else if (dataType === 'cashTransactions') cashTransactions = dataArray;
+                            else if (dataType === 'customEmployeeLists') customEmployeeLists = dataArray;
                         } else {
                             if (dataType === 'employees') employees = [];
                             else if (dataType === 'stations') stations = [];
@@ -1621,6 +1730,7 @@
                             else if (dataType === 'faults') faults = [];
                             else if (dataType === 'financials') financials = [];
                             else if (dataType === 'cashTransactions') cashTransactions = [];
+                            else if (dataType === 'customEmployeeLists') customEmployeeLists = [];
                         }
                         resolve();
                     })
@@ -1631,7 +1741,6 @@
             });
         }
 
-        // إضافة بيانات إلى Firebase
         function addData(dataType, newItem) {
             return new Promise((resolve, reject) => {
                 const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
@@ -1645,6 +1754,7 @@
                         else if (dataType === 'faults') faults.push(itemWithId);
                         else if (dataType === 'financials') financials.push(itemWithId);
                         else if (dataType === 'cashTransactions') cashTransactions.push(itemWithId);
+                        else if (dataType === 'customEmployeeLists') customEmployeeLists.push(itemWithId);
                         
                         resolve(itemWithId);
                     })
@@ -1655,12 +1765,10 @@
             });
         }
 
-        // تحديث بيانات في Firebase
         function updateData(dataType, id, updatedData) {
             return new Promise((resolve, reject) => {
                 database.ref(`${dataType}/${id}`).update(updatedData)
                     .then(() => {
-                        // تحديث المصفوفة المحلية
                         if (dataType === 'attendance') {
                             const index = attendance.findIndex(item => item.id === id);
                             if (index !== -1) attendance[index] = { ...attendance[index], ...updatedData };
@@ -1676,6 +1784,9 @@
                         } else if (dataType === 'cashTransactions') {
                             const index = cashTransactions.findIndex(item => item.id === id);
                             if (index !== -1) cashTransactions[index] = { ...cashTransactions[index], ...updatedData };
+                        } else if (dataType === 'customEmployeeLists') {
+                            const index = customEmployeeLists.findIndex(item => item.id === id);
+                            if (index !== -1) customEmployeeLists[index] = { ...customEmployeeLists[index], ...updatedData };
                         }
                         
                         resolve();
@@ -1687,7 +1798,6 @@
             });
         }
 
-        // حذف بيانات من Firebase
         function deleteData(dataType, id) {
             return new Promise((resolve, reject) => {
                 database.ref(`${dataType}/${id}`).remove()
@@ -1697,6 +1807,7 @@
                         else if (dataType === 'faults') faults = faults.filter(item => item.id !== id);
                         else if (dataType === 'financials') financials = financials.filter(item => item.id !== id);
                         else if (dataType === 'cashTransactions') cashTransactions = cashTransactions.filter(item => item.id !== id);
+                        else if (dataType === 'customEmployeeLists') customEmployeeLists = customEmployeeLists.filter(item => item.id !== id);
                         
                         resolve();
                     })
@@ -1707,10 +1818,8 @@
             });
         }
 
-        // إرسال إشعار واتساب للمدير العام عند تسجيل عطل جديد
         function sendFaultNotificationToManager(faultData) {
             try {
-                // تكوين رسالة الإشعار
                 const message = `🚨 *تنبيه عطل جديد* 🚨
                 
 🔧 *العنوان:* ${faultData.title}
@@ -1722,13 +1831,9 @@
 
 يرجى فتح التطبيق لمتابعة المزيد من التفاصيل.`;
 
-                // ترميز الرسالة للواتساب
                 const encodedMessage = encodeURIComponent(message);
-                
-                // رابط واتساب (بدون + وبدون صفر في البداية)
                 const whatsappUrl = `https://wa.me/${MANAGER_PHONE}?text=${encodedMessage}`;
                 
-                // فتح واتساب في نافذة جديدة
                 window.open(whatsappUrl, '_blank');
                 
                 console.log('تم إرسال إشعار للمدير العام عبر واتساب');
@@ -1739,7 +1844,6 @@
             }
         }
 
-        // عرض مؤشر التحميل
         function showLoading(show) {
             if (show) {
                 mainContent.innerHTML = `
@@ -1751,7 +1855,6 @@
             }
         }
 
-        // عرض رسالة خطأ
         function showError(message) {
             mainContent.innerHTML = `
                 <div class="alert alert-error" style="text-align: center; padding: 40px 20px;">
@@ -1768,13 +1871,11 @@
         function showDashboard() {
             const today = getTodayDate();
             
-            // إحصائيات اليوم
             const todayAttendance = attendance.filter(a => a.date === today && a.supervisorId === currentSupervisor.id);
             const todayLeaves = leaves.filter(l => l.start <= today && l.end >= today && l.supervisorId === currentSupervisor.id);
             const pendingFaults = faults.filter(f => f.status !== 'fixed' && f.supervisorId === currentSupervisor.id);
             const todayFinancials = financials.filter(f => f.date === today && f.supervisorId === currentSupervisor.id);
             
-            // إحصائيات العهدة
             const cashBalance = calculateCashBalance();
             const balanceClass = cashBalance < 0 ? 'negative' : '';
             
@@ -1859,8 +1960,24 @@
             
             let html = '';
             recent.forEach(record => {
-                const statusClass = record.status === 'حاضر' ? 'status-present' : 
-                                   record.status === 'غائب' ? 'status-absent' : 'status-leave';
+                const today = getTodayDate();
+                const isOnLeaveToday = leaves.some(l => 
+                    l.employeeName === record.employeeName && 
+                    l.start <= today && 
+                    l.end >= today
+                );
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                if (isOnLeaveToday) {
+                    statusClass = 'status-leave';
+                    statusText = '🏖️ في إجازة';
+                } else {
+                    statusClass = record.status === 'حاضر' ? 'status-present' : 'status-absent';
+                    statusText = record.status === 'حاضر' ? '✅ حاضر' : '❌ غائب';
+                }
+                
                 html += `
                     <div class="list-item">
                         <div class="item-info">
@@ -1870,7 +1987,7 @@
                                 <span>${record.date}</span>
                             </div>
                         </div>
-                        <div class="${statusClass}">${record.status}</div>
+                        <div class="${statusClass}">${statusText}</div>
                     </div>
                 `;
             });
@@ -1940,7 +2057,6 @@
             return html;
         }
 
-        // حساب رصيد العهدة
         function calculateCashBalance() {
             let balance = 0;
             cashTransactions.forEach(transaction => {
@@ -1953,135 +2069,253 @@
             return balance;
         }
 
-        // حساب إجمالي الإيداعات
         function calculateTotalDeposits() {
             return cashTransactions
                 .filter(t => t.type === 'إيداع')
                 .reduce((sum, t) => sum + t.amount, 0);
         }
 
-        // حساب إجمالي المصروفات
         function calculateTotalWithdrawals() {
             return cashTransactions
                 .filter(t => t.type === 'صرف')
                 .reduce((sum, t) => sum + t.amount, 0);
         }
 
-        // ==================== صفحة تسجيل الحضور ====================
+        // ==================== صفحة تسجيل الحضور (مفرد أو بالجملة) ====================
         function showAttendancePage() {
             const today = getTodayDate();
+            
+            // إعادة تعيين المصفوفات
+            selectedPresentEmployees = [];
+            selectedLeaveEmployees = [];
+            currentAttendanceTab = 'present';
+            selectedStation = '';
+            currentMode = 'single';
             
             mainContent.innerHTML = `
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-user-check"></i> تسجيل الحضور والغياب
+                        <i class="fas fa-user-check"></i> تسجيل الحضور
                     </div>
                     <div class="card-body">
-                        <form id="attendanceForm">
+                        <!-- اختيار طريقة التسجيل -->
+                        <div class="mode-tabs">
+                            <div class="mode-tab single active" onclick="switchMode('single')">
+                                <i class="fas fa-user"></i> تسجيل مفرد
+                            </div>
+                            <div class="mode-tab bulk" onclick="switchMode('bulk')">
+                                <i class="fas fa-users"></i> تسجيل بالجملة
+                            </div>
+                        </div>
+                        
+                        <!-- قسم المحطة (يظهر في كلتا الحالتين) -->
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> اختر المحطة</label>
+                            <select id="attendanceStationSelect" onchange="onStationChange()">
+                                <option value="">-- اختر المحطة --</option>
+                                ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> التاريخ</label>
+                            <input type="date" id="attendanceDate" value="${today}" min="${today}" required>
+                        </div>
+                        
+                        <!-- قسم التسجيل المفرد -->
+                        <div id="singleModeSection" style="display: block;">
                             <div class="form-group">
-                                <label><i class="fas fa-user"></i> الموظف</label>
-                                <select id="attendanceEmployee" required>
-                                    <option value="">اختر الموظف</option>
-                                    ${getEmployeesOptions()}
+                                <label><i class="fas fa-user"></i> اختر الموظف</label>
+                                <select id="singleEmployeeSelect" required>
+                                    <option value="">-- اختر الموظف --</option>
                                 </select>
                             </div>
                             
-                            <div class="form-group">
-                                <label><i class="fas fa-building"></i> المحطة</label>
-                                <select id="attendanceStation" required>
-                                    <option value="">اختر المحطة</option>
-                                    ${getStationsOptions()}
-                                </select>
+                            <div class="attendance-tabs">
+                                <div class="attendance-tab present active" onclick="setSingleAttendanceType('present')">
+                                    <i class="fas fa-check-circle"></i> حضور
+                                </div>
+                                <div class="attendance-tab leave" onclick="setSingleAttendanceType('leave')">
+                                    <i class="fas fa-umbrella-beach"></i> إجازة
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar"></i> التاريخ</label>
-                                <input type="date" id="attendanceDate" value="${today}" min="${today}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> الحالة</label>
-                                <select id="attendanceStatus" required>
-                                    <option value="حاضر">✅ حاضر (موجود في المحطة)</option>
-                                    <option value="غائب">❌ غائب (غير موجود)</option>
-                                    <option value="إجازة">🏖️ إجازة</option>
-                                </select>
-                            </div>
-                            
-                            <button type="submit" class="btn-success">
-                                <span id="attendanceSubmitText"><i class="fas fa-save"></i> تسجيل الحضور</span>
+                            <button class="btn-success" onclick="saveSingleAttendance()">
+                                <i class="fas fa-save"></i> تسجيل الحضور
                             </button>
-                        </form>
+                        </div>
+                        
+                        <!-- قسم التسجيل بالجملة -->
+                        <div id="bulkModeSection" style="display: none;">
+                            <div class="attendance-tabs">
+                                <div class="attendance-tab present active" onclick="switchAttendanceTab('present')">
+                                    <i class="fas fa-check-circle"></i> حضور
+                                </div>
+                                <div class="attendance-tab leave" onclick="switchAttendanceTab('leave')">
+                                    <i class="fas fa-umbrella-beach"></i> إجازة
+                                </div>
+                            </div>
+                            
+                            <div id="presentSection" style="display: block;">
+                                <div class="selected-count" id="presentCount">0 موظف مختار للحضور</div>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn-secondary" onclick="selectAllPresent()">
+                                        <i class="fas fa-check-double"></i> تحديد الكل
+                                    </button>
+                                    <button class="btn-secondary" onclick="deselectAllPresent()">
+                                        <i class="fas fa-times"></i> إلغاء الكل
+                                    </button>
+                                </div>
+                                
+                                <h4 style="margin: 10px 0; color: var(--primary);">✅ الموظفون الحاضرون</h4>
+                                <div id="presentEmployeesList" class="employees-grid">
+                                    ${displayEmployeesForAttendance('present')}
+                                </div>
+                                
+                                <button class="btn-success" onclick="saveBulkAttendance('present')" style="margin-top: 15px;">
+                                    <i class="fas fa-save"></i> حفظ الحضور المختارين
+                                </button>
+                            </div>
+                            
+                            <div id="leaveSection" style="display: none;">
+                                <div class="selected-count" id="leaveCount">0 موظف مختار للإجازة</div>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn-secondary" onclick="selectAllLeave()">
+                                        <i class="fas fa-check-double"></i> تحديد الكل
+                                    </button>
+                                    <button class="btn-secondary" onclick="deselectAllLeave()">
+                                        <i class="fas fa-times"></i> إلغاء الكل
+                                    </button>
+                                </div>
+                                
+                                <h4 style="margin: 10px 0; color: var(--warning);">🏖️ الموظفون في إجازة</h4>
+                                <div id="leaveEmployeesList" class="employees-grid">
+                                    ${displayEmployeesForAttendance('leave')}
+                                </div>
+                                
+                                <button class="btn-warning" onclick="saveBulkAttendance('leave')" style="margin-top: 15px;">
+                                    <i class="fas fa-save"></i> حفظ الإجازات المختارة
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-history"></i> آخر تسجيلاتي
+                        <i class="fas fa-history"></i> آخر تسجيلات اليوم
                     </div>
                     <div class="card-body">
-                        <div class="filter-section">
-                            <div class="form-group">
-                                <label><i class="fas fa-filter"></i> فلترة حسب التاريخ</label>
-                                <input type="date" id="filterAttendanceDate" value="${today}" min="${today}">
-                            </div>
-                        </div>
-                        <div id="myAttendanceList">
-                            ${displayMyAttendance(today)}
+                        <div id="todayAttendanceList">
+                            ${displayTodayAttendance()}
                         </div>
                     </div>
                 </div>
             `;
             
-            // إضافة مستمع الحدث للنموذج
-            document.getElementById('attendanceForm').addEventListener('submit', recordAttendance);
-            document.getElementById('filterAttendanceDate').addEventListener('change', function() {
-                document.getElementById('myAttendanceList').innerHTML = displayMyAttendance(this.value);
+            // تحديث قائمة الموظفين للتسجيل المفرد
+            updateSingleEmployeeSelect();
+        }
+
+        // التبديل بين وضع التسجيل المفرد والجملة
+        window.switchMode = function(mode) {
+            currentMode = mode;
+            
+            // تحديث التبويبات
+            document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.classList.remove('active');
             });
-        }
-
-        function getEmployeesOptions() {
-            const activeEmployees = employees.filter(emp => emp.active);
-            if (activeEmployees.length === 0) {
-                return '<option value="" disabled>لا يوجد موظفين نشطين</option>';
-            }
-            return activeEmployees.map(emp => 
-                `<option value="${emp.name}">${emp.name}</option>`
-            ).join('');
-        }
-
-        function getStationsOptions() {
-            if (stations.length === 0) {
-                return '<option value="" disabled>لا توجد محطات مسجلة</option>';
-            }
-            return stations.map(station => 
-                `<option value="${station.name}">${station.name}</option>`
-            ).join('');
-        }
-
-        function recordAttendance(e) {
-            e.preventDefault();
             
-            const employeeName = document.getElementById('attendanceEmployee').value;
-            const stationName = document.getElementById('attendanceStation').value;
+            if (mode === 'single') {
+                document.querySelector('.mode-tab.single').classList.add('active');
+                document.getElementById('singleModeSection').style.display = 'block';
+                document.getElementById('bulkModeSection').style.display = 'none';
+                updateSingleEmployeeSelect();
+            } else {
+                document.querySelector('.mode-tab.bulk').classList.add('active');
+                document.getElementById('singleModeSection').style.display = 'none';
+                document.getElementById('bulkModeSection').style.display = 'block';
+                
+                // إعادة تحميل قوائم الموظفين للتسجيل بالجملة
+                if (selectedStation) {
+                    if (currentAttendanceTab === 'present') {
+                        document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
+                    } else {
+                        document.getElementById('leaveEmployeesList').innerHTML = displayEmployeesForAttendance('leave');
+                    }
+                }
+            }
+        };
+
+        // تحديث قائمة الموظفين في التسجيل المفرد
+        function updateSingleEmployeeSelect() {
+            const select = document.getElementById('singleEmployeeSelect');
+            if (!select) return;
+            
+            let options = '<option value="">-- اختر الموظف --</option>';
+            
+            if (selectedStation) {
+                const customEmps = getCustomEmployeesForStation(selectedStation);
+                customEmps.sort().forEach(empName => {
+                    options += `<option value="${empName}">${empName}</option>`;
+                });
+            }
+            
+            select.innerHTML = options;
+        }
+
+        // تحديد نوع الحضور في التسجيل المفرد
+        let singleAttendanceType = 'present';
+        window.setSingleAttendanceType = function(type) {
+            singleAttendanceType = type;
+            
+            document.querySelectorAll('#singleModeSection .attendance-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            if (type === 'present') {
+                document.querySelector('#singleModeSection .attendance-tab.present').classList.add('active');
+            } else {
+                document.querySelector('#singleModeSection .attendance-tab.leave').classList.add('active');
+            }
+        };
+
+        // حفظ تسجيل مفرد
+        window.saveSingleAttendance = function() {
             const date = document.getElementById('attendanceDate').value;
-            const status = document.getElementById('attendanceStatus').value;
+            const employeeName = document.getElementById('singleEmployeeSelect').value;
             
-            if (!employeeName || !stationName || !date || !status) {
-                showTemporaryMessage('يرجى ملء جميع الحقول', 'error');
+            if (!date) {
+                showTemporaryMessage('يرجى اختيار التاريخ', 'error');
                 return;
             }
             
-            const existingRecord = attendance.find(record => 
-                record.employeeName === employeeName && record.date === date
-            );
+            if (!selectedStation) {
+                showTemporaryMessage('يرجى اختيار المحطة أولاً', 'error');
+                return;
+            }
             
-            const submitBtn = document.getElementById('attendanceSubmitText');
-            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            if (!employeeName) {
+                showTemporaryMessage('يرجى اختيار الموظف', 'error');
+                return;
+            }
+            
+            if (checkExistingRecord(employeeName, date)) {
+                showTemporaryMessage('هذا الموظف مسجل مسبقاً في هذا اليوم', 'error');
+                return;
+            }
+            
+            const status = singleAttendanceType === 'present' ? 'حاضر' : 'إجازة';
+            
+            const saveBtn = document.querySelector('#singleModeSection .btn-success');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
             
             const newAttendance = {
                 employeeName,
-                stationName,
+                stationName: selectedStation,
                 supervisorId: currentSupervisor.id,
                 supervisorName: currentSupervisor.employeeName,
                 date,
@@ -2089,225 +2323,639 @@
                 timestamp: new Date().toISOString()
             };
             
-            let promise;
+            addData('attendance', newAttendance)
+                .then(() => {
+                    saveBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
+                    
+                    setTimeout(() => {
+                        saveBtn.innerHTML = originalText;
+                    }, 2000);
+                    
+                    // تحديث القوائم
+                    updateSingleEmployeeSelect();
+                    document.getElementById('todayAttendanceList').innerHTML = displayTodayAttendance();
+                    
+                    showTemporaryMessage(`تم تسجيل ${employeeName} بنجاح`, 'success');
+                })
+                .catch(error => {
+                    saveBtn.innerHTML = originalText;
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        };
+
+        // عند تغيير المحطة
+        window.onStationChange = function() {
+            const stationSelect = document.getElementById('attendanceStationSelect');
+            selectedStation = stationSelect.value;
             
-            if (existingRecord) {
-                promise = updateData('attendance', existingRecord.id, newAttendance);
-            } else {
-                promise = addData('attendance', newAttendance);
+            if (!selectedStation) {
+                if (currentMode === 'single') {
+                    document.getElementById('singleEmployeeSelect').innerHTML = '<option value="">-- اختر الموظف --</option>';
+                } else {
+                    document.getElementById('presentEmployeesList').innerHTML = '<div class="empty-state"><i class="fas fa-building"></i>يرجى اختيار محطة أولاً</div>';
+                    document.getElementById('leaveEmployeesList').innerHTML = '<div class="empty-state"><i class="fas fa-building"></i>يرجى اختيار محطة أولاً</div>';
+                }
+                return;
             }
             
-            promise.then(() => {
-                submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
-                document.getElementById('attendanceForm').reset();
-                document.getElementById('attendanceDate').value = getTodayDate();
+            if (currentMode === 'single') {
+                updateSingleEmployeeSelect();
+            } else {
+                // إعادة تعيين التحديدات
+                selectedPresentEmployees = [];
+                selectedLeaveEmployees = [];
                 
-                setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الحضور';
-                }, 2000);
+                if (currentAttendanceTab === 'present') {
+                    document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
+                    document.getElementById('presentCount').textContent = '0 موظف مختار للحضور';
+                } else {
+                    document.getElementById('leaveEmployeesList').innerHTML = displayEmployeesForAttendance('leave');
+                    document.getElementById('leaveCount').textContent = '0 موظف مختار للإجازة';
+                }
+            }
+        };
+
+        // عرض الموظفين للحضور أو الإجازة حسب المحطة المختارة (للتسجيل بالجملة)
+        function displayEmployeesForAttendance(type) {
+            if (!selectedStation) return '<div class="empty-state"><i class="fas fa-building"></i>يرجى اختيار محطة أولاً</div>';
+            
+            // الحصول على الموظفين المخصصين لهذه المحطة
+            const customEmps = getCustomEmployeesForStation(selectedStation);
+            
+            if (customEmps.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-users-slash"></i>لا يوجد موظفين مخصصين لهذه المحطة</div>';
+            }
+            
+            // ترتيب الموظفين حسب الاسم
+            customEmps.sort();
+            
+            let html = '';
+            customEmps.forEach(employeeName => {
+                const today = getTodayDate();
+                const alreadyRecorded = checkExistingRecord(employeeName, today);
                 
-                // تحديث القائمة
-                const filterDate = document.getElementById('filterAttendanceDate').value;
-                document.getElementById('myAttendanceList').innerHTML = displayMyAttendance(filterDate);
+                if (alreadyRecorded) {
+                    return;
+                }
                 
-                showTemporaryMessage('تم تسجيل الحضور بنجاح', 'success');
-            }).catch(error => {
-                submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
-                console.error(error);
-                showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                const isSelected = type === 'present' ? 
+                    selectedPresentEmployees.includes(employeeName) : 
+                    selectedLeaveEmployees.includes(employeeName);
+                
+                html += `
+                    <div class="employee-card ${isSelected ? 'selected' : ''}" onclick="toggleEmployeeAttendance('${employeeName}', '${type}')" id="${type}-${employeeName.replace(/\s/g, '')}">
+                        <div class="employee-name">${employeeName}</div>
+                        <div class="employee-station">${selectedStation}</div>
+                    </div>
+                `;
             });
+            
+            if (html === '') {
+                return '<div class="empty-state"><i class="fas fa-check-circle"></i>جميع الموظفين مسجلين اليوم</div>';
+            }
+            
+            return html;
         }
 
-        function displayMyAttendance(date) {
-            const myAttendance = attendance
-                .filter(a => a.supervisorId === currentSupervisor.id && a.date === date)
+        // تبديل علامة التبويب (للتسجيل بالجملة)
+        window.switchAttendanceTab = function(tab) {
+            currentAttendanceTab = tab;
+            
+            document.querySelectorAll('#bulkModeSection .attendance-tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'present') {
+                document.querySelector('#bulkModeSection .attendance-tab.present').classList.add('active');
+                document.getElementById('presentSection').style.display = 'block';
+                document.getElementById('leaveSection').style.display = 'none';
+            } else {
+                document.querySelector('#bulkModeSection .attendance-tab.leave').classList.add('active');
+                document.getElementById('presentSection').style.display = 'none';
+                document.getElementById('leaveSection').style.display = 'block';
+            }
+        };
+
+        // تبديل اختيار موظف للحضور أو الإجازة (للتسجيل بالجملة)
+        window.toggleEmployeeAttendance = function(employeeName, type) {
+            if (type === 'present') {
+                const index = selectedPresentEmployees.indexOf(employeeName);
+                if (index === -1) {
+                    selectedPresentEmployees.push(employeeName);
+                } else {
+                    selectedPresentEmployees.splice(index, 1);
+                }
+                
+                const card = document.getElementById(`present-${employeeName.replace(/\s/g, '')}`);
+                if (card) {
+                    if (selectedPresentEmployees.includes(employeeName)) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                }
+                
+                const counter = document.getElementById('presentCount');
+                if (counter) {
+                    counter.textContent = `${selectedPresentEmployees.length} موظف مختار للحضور`;
+                }
+            } else {
+                const index = selectedLeaveEmployees.indexOf(employeeName);
+                if (index === -1) {
+                    selectedLeaveEmployees.push(employeeName);
+                } else {
+                    selectedLeaveEmployees.splice(index, 1);
+                }
+                
+                const card = document.getElementById(`leave-${employeeName.replace(/\s/g, '')}`);
+                if (card) {
+                    if (selectedLeaveEmployees.includes(employeeName)) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                }
+                
+                const counter = document.getElementById('leaveCount');
+                if (counter) {
+                    counter.textContent = `${selectedLeaveEmployees.length} موظف مختار للإجازة`;
+                }
+            }
+        };
+
+        // تحديد كل الموظفين للحضور (للتسجيل بالجملة)
+        window.selectAllPresent = function() {
+            if (!selectedStation) return;
+            
+            const customEmps = getCustomEmployeesForStation(selectedStation);
+            const today = getTodayDate();
+            
+            selectedPresentEmployees = customEmps
+                .filter(empName => !checkExistingRecord(empName, today));
+            
+            customEmps.forEach(empName => {
+                const card = document.getElementById(`present-${empName.replace(/\s/g, '')}`);
+                if (card && !checkExistingRecord(empName, today)) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            const counter = document.getElementById('presentCount');
+            if (counter) {
+                counter.textContent = `${selectedPresentEmployees.length} موظف مختار للحضور`;
+            }
+        };
+
+        // إلغاء تحديد كل الموظفين للحضور (للتسجيل بالجملة)
+        window.deselectAllPresent = function() {
+            if (!selectedStation) return;
+            
+            const customEmps = getCustomEmployeesForStation(selectedStation);
+            
+            selectedPresentEmployees = [];
+            
+            customEmps.forEach(empName => {
+                const card = document.getElementById(`present-${empName.replace(/\s/g, '')}`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            });
+            
+            const counter = document.getElementById('presentCount');
+            if (counter) {
+                counter.textContent = `0 موظف مختار للحضور`;
+            }
+        };
+
+        // تحديد كل الموظفين للإجازة (للتسجيل بالجملة)
+        window.selectAllLeave = function() {
+            if (!selectedStation) return;
+            
+            const customEmps = getCustomEmployeesForStation(selectedStation);
+            const today = getTodayDate();
+            
+            selectedLeaveEmployees = customEmps
+                .filter(empName => !checkExistingRecord(empName, today));
+            
+            customEmps.forEach(empName => {
+                const card = document.getElementById(`leave-${empName.replace(/\s/g, '')}`);
+                if (card && !checkExistingRecord(empName, today)) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            const counter = document.getElementById('leaveCount');
+            if (counter) {
+                counter.textContent = `${selectedLeaveEmployees.length} موظف مختار للإجازة`;
+            }
+        };
+
+        // إلغاء تحديد كل الموظفين للإجازة (للتسجيل بالجملة)
+        window.deselectAllLeave = function() {
+            if (!selectedStation) return;
+            
+            const customEmps = getCustomEmployeesForStation(selectedStation);
+            
+            selectedLeaveEmployees = [];
+            
+            customEmps.forEach(empName => {
+                const card = document.getElementById(`leave-${empName.replace(/\s/g, '')}`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            });
+            
+            const counter = document.getElementById('leaveCount');
+            if (counter) {
+                counter.textContent = `0 موظف مختار للإجازة`;
+            }
+        };
+
+        // حفظ الحضور بالجملة
+        window.saveBulkAttendance = function(type) {
+            const date = document.getElementById('attendanceDate').value;
+            
+            if (!date) {
+                showTemporaryMessage('يرجى اختيار التاريخ', 'error');
+                return;
+            }
+            
+            if (!selectedStation) {
+                showTemporaryMessage('يرجى اختيار المحطة أولاً', 'error');
+                return;
+            }
+            
+            let selectedEmployees = type === 'present' ? selectedPresentEmployees : selectedLeaveEmployees;
+            let status = type === 'present' ? 'حاضر' : 'إجازة';
+            
+            if (selectedEmployees.length === 0) {
+                showTemporaryMessage(`يرجى اختيار موظفين ${type === 'present' ? 'للحضور' : 'للإجازة'} أولاً`, 'error');
+                return;
+            }
+            
+            const saveBtn = type === 'present' ? 
+                document.querySelector('#presentSection .btn-success') : 
+                document.querySelector('#leaveSection .btn-warning');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<div class="loading"></div> جاري الحفظ...';
+            
+            // حفظ كل موظف مع المحطة المختارة
+            const promises = selectedEmployees.map(employeeName => {
+                const newAttendance = {
+                    employeeName,
+                    stationName: selectedStation,
+                    supervisorId: currentSupervisor.id,
+                    supervisorName: currentSupervisor.employeeName,
+                    date,
+                    status,
+                    timestamp: new Date().toISOString()
+                };
+                
+                return addData('attendance', newAttendance);
+            });
+            
+            Promise.all(promises)
+                .then(() => {
+                    saveBtn.innerHTML = '<i class="fas fa-check"></i> تم الحفظ بنجاح';
+                    
+                    setTimeout(() => {
+                        saveBtn.innerHTML = originalText;
+                    }, 2000);
+                    
+                    // إعادة تعيين التحديدات
+                    if (type === 'present') {
+                        selectedPresentEmployees = [];
+                        document.getElementById('presentCount').textContent = '0 موظف مختار للحضور';
+                    } else {
+                        selectedLeaveEmployees = [];
+                        document.getElementById('leaveCount').textContent = '0 موظف مختار للإجازة';
+                    }
+                    
+                    // إعادة عرض القوائم
+                    if (type === 'present') {
+                        document.getElementById('presentEmployeesList').innerHTML = displayEmployeesForAttendance('present');
+                    } else {
+                        document.getElementById('leaveEmployeesList').innerHTML = displayEmployeesForAttendance('leave');
+                    }
+                    
+                    // تحديث قائمة تسجيلات اليوم
+                    document.getElementById('todayAttendanceList').innerHTML = displayTodayAttendance();
+                    
+                    showTemporaryMessage(`تم تسجيل ${selectedEmployees.length} موظف بنجاح في محطة ${selectedStation}`, 'success');
+                })
+                .catch(error => {
+                    saveBtn.innerHTML = originalText;
+                    console.error(error);
+                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
+                });
+        };
+
+        // عرض تسجيلات اليوم
+        function displayTodayAttendance() {
+            const today = getTodayDate();
+            
+            const todayRecords = attendance
+                .filter(a => a.date === today && a.supervisorId === currentSupervisor.id)
                 .sort((a, b) => a.employeeName.localeCompare(b.employeeName));
             
-            if (myAttendance.length === 0) {
+            if (todayRecords.length === 0) {
                 return '<div class="empty-state"><i class="fas fa-calendar-times"></i>لا توجد تسجيلات لهذا اليوم</div>';
             }
             
             let html = '';
-            myAttendance.forEach(record => {
-                const statusClass = record.status === 'حاضر' ? 'status-present' : 
-                                   record.status === 'غائب' ? 'status-absent' : 'status-leave';
-                const statusIcon = record.status === 'حاضر' ? '✅' : 
-                                  record.status === 'غائب' ? '❌' : '🏖️';
+            todayRecords.forEach(record => {
+                const statusClass = record.status === 'حاضر' ? 'status-present' : 'status-leave';
+                const statusText = record.status === 'حاضر' ? '✅ حاضر' : '🏖️ إجازة';
                 
                 html += `
                     <div class="list-item">
                         <div class="item-info">
                             <div class="item-title">${record.employeeName}</div>
                             <div class="item-subtitle">
-                                <span class="station-badge">${record.stationName}</span>
+                                <span class="station-badge">${record.stationName || 'غير محدد'}</span>
                             </div>
                         </div>
-                        <div class="${statusClass}">${statusIcon} ${record.status}</div>
+                        <div class="${statusClass}">${statusText}</div>
                     </div>
                 `;
             });
             return html;
         }
 
-        // ==================== صفحة إدارة الإجازات ====================
-        function showLeavesPage() {
-            const today = getTodayDate();
+        // ==================== صفحة إعدادات الموظفين ====================
+        function showEmployeesSettingsPage() {
+            const customLists = getCustomListsForCurrentSupervisor();
             
             mainContent.innerHTML = `
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-umbrella-beach"></i> تسجيل إجازة جديدة
+                        <i class="fas fa-users-cog"></i> إعدادات قوائم الموظفين
                     </div>
                     <div class="card-body">
-                        <form id="leaveForm">
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> الموظف</label>
-                                <select id="leaveEmployee" required>
-                                    <option value="">اختر الموظف</option>
-                                    ${getEmployeesOptions()}
-                                </select>
+                        <div class="info-text">
+                            <i class="fas fa-info-circle"></i>
+                            اختر المحطة ثم اختر الموظفين الذين تريد ظهورهم عند تسجيل الحضور لهذه المحطة.
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> اختر المحطة</label>
+                            <select id="customListStationSelect" onchange="loadEmployeesForStation()">
+                                <option value="">اختر المحطة</option>
+                                ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div id="employeesManagementSection" style="display: none;">
+                            <div class="selected-count" id="selectedCount">0 موظف مختار</div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-secondary" onclick="selectAllEmployees()">
+                                    <i class="fas fa-check-double"></i> تحديد الكل
+                                </button>
+                                <button class="btn-secondary" onclick="deselectAllEmployees()">
+                                    <i class="fas fa-times"></i> إلغاء الكل
+                                </button>
                             </div>
                             
-                            <div class="form-group">
-                                <label><i class="fas fa-building"></i> المحطة</label>
-                                <select id="leaveStation" required>
-                                    <option value="">اختر المحطة</option>
-                                    ${getStationsOptions()}
-                                </select>
+                            <h4 style="margin: 10px 0; color: var(--primary);">📋 كل الموظفين</h4>
+                            <div id="allEmployeesList" class="employees-grid">
+                                ${displayAllEmployees()}
                             </div>
                             
-                            <div class="form-group">
-                                <label><i class="fas fa-tag"></i> نوع الإجازة</label>
-                                <select id="leaveType" required>
-                                    <option value="سنوية">📅 سنوية</option>
-                                    <option value="مرضية">🏥 مرضية</option>
-                                    <option value="طارئة">⚡ طارئة</option>
-                                    <option value="أخرى">🔄 أخرى</option>
-                                </select>
+                            <div style="margin-top: 20px;">
+                                <button class="btn-success" onclick="saveCustomList()">
+                                    <i class="fas fa-save"></i> حفظ القائمة المخصصة لهذه المحطة
+                                </button>
                             </div>
-                            
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar-start"></i> تاريخ البدء</label>
-                                <input type="date" id="leaveStart" value="${today}" min="${today}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar-end"></i> تاريخ الانتهاء</label>
-                                <input type="date" id="leaveEnd" value="${today}" min="${today}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
-                                <textarea id="leaveNotes" rows="3" placeholder="أدخل ملاحظات حول الإجازة (اختياري)"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn-warning">
-                                <span id="leaveSubmitText"><i class="fas fa-save"></i> تسجيل الإجازة</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-list"></i> الإجازات النشطة
-                    </div>
-                    <div class="card-body" id="activeLeavesList">
-                        ${displayActiveLeaves()}
+                        </div>
+                        
+                        <hr style="margin: 20px 0; border: 1px solid var(--gray-light);">
+                        
+                        <h4 style="margin-bottom: 15px; color: var(--primary);">📋 قوائمي المخصصة حسب المحطات</h4>
+                        
+                        <div id="customListsContainer">
+                            ${displayCustomLists()}
+                        </div>
                     </div>
                 </div>
             `;
-            
-            document.getElementById('leaveForm').addEventListener('submit', recordLeave);
         }
 
-        function recordLeave(e) {
-            e.preventDefault();
+        function displayAllEmployees() {
+            const activeEmployees = employees.filter(emp => emp.active);
             
-            const employeeName = document.getElementById('leaveEmployee').value;
-            const stationName = document.getElementById('leaveStation').value;
-            const type = document.getElementById('leaveType').value;
-            const start = document.getElementById('leaveStart').value;
-            const end = document.getElementById('leaveEnd').value;
-            const notes = document.getElementById('leaveNotes').value;
+            if (activeEmployees.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-users-slash"></i>لا يوجد موظفين</div>';
+            }
             
-            if (!employeeName || !stationName || !type || !start || !end) {
-                showTemporaryMessage('يرجى ملء جميع الحقول المطلوبة', 'error');
+            activeEmployees.sort((a, b) => a.name.localeCompare(b.name));
+            
+            let html = '';
+            activeEmployees.forEach(emp => {
+                html += `
+                    <div class="employee-card" onclick="toggleEmployeeSelection('${emp.name}')" id="emp-${emp.name.replace(/\s/g, '')}">
+                        <div class="employee-name">${emp.name}</div>
+                        <div class="employee-station">${emp.station || 'محطة غير محددة'}</div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        window.toggleEmployeeSelection = function(employeeName) {
+            const index = selectedEmployees.indexOf(employeeName);
+            if (index === -1) {
+                selectedEmployees.push(employeeName);
+            } else {
+                selectedEmployees.splice(index, 1);
+            }
+            
+            const card = document.getElementById(`emp-${employeeName.replace(/\s/g, '')}`);
+            if (card) {
+                if (selectedEmployees.includes(employeeName)) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            }
+            
+            const counter = document.getElementById('selectedCount');
+            if (counter) {
+                counter.textContent = `${selectedEmployees.length} موظف مختار`;
+            }
+        };
+
+        window.selectAllEmployees = function() {
+            const activeEmployees = employees.filter(emp => emp.active);
+            selectedEmployees = activeEmployees.map(emp => emp.name);
+            
+            activeEmployees.forEach(emp => {
+                const card = document.getElementById(`emp-${emp.name.replace(/\s/g, '')}`);
+                if (card) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            const counter = document.getElementById('selectedCount');
+            if (counter) {
+                counter.textContent = `${selectedEmployees.length} موظف مختار`;
+            }
+        };
+
+        window.deselectAllEmployees = function() {
+            const activeEmployees = employees.filter(emp => emp.active);
+            selectedEmployees = [];
+            
+            activeEmployees.forEach(emp => {
+                const card = document.getElementById(`emp-${emp.name.replace(/\s/g, '')}`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            });
+            
+            const counter = document.getElementById('selectedCount');
+            if (counter) {
+                counter.textContent = `0 موظف مختار`;
+            }
+        };
+
+        window.loadEmployeesForStation = function() {
+            const stationSelect = document.getElementById('customListStationSelect');
+            const stationName = stationSelect.value;
+            
+            if (!stationName) {
+                document.getElementById('employeesManagementSection').style.display = 'none';
                 return;
             }
             
-            if (new Date(start) > new Date(end)) {
-                showTemporaryMessage('تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء', 'error');
+            const customEmps = getCustomEmployeesForStation(stationName);
+            selectedEmployees = [...customEmps];
+            
+            const allEmployeesList = document.getElementById('allEmployeesList');
+            if (allEmployeesList) {
+                allEmployeesList.innerHTML = displayAllEmployees();
+                
+                selectedEmployees.forEach(empName => {
+                    const card = document.getElementById(`emp-${empName.replace(/\s/g, '')}`);
+                    if (card) {
+                        card.classList.add('selected');
+                    }
+                });
+            }
+            
+            const counter = document.getElementById('selectedCount');
+            if (counter) {
+                counter.textContent = `${selectedEmployees.length} موظف مختار`;
+            }
+            
+            document.getElementById('employeesManagementSection').style.display = 'block';
+        };
+
+        window.saveCustomList = function() {
+            const stationSelect = document.getElementById('customListStationSelect');
+            const stationName = stationSelect.value;
+            
+            if (!stationName) {
+                showTemporaryMessage('يرجى اختيار المحطة أولاً', 'error');
                 return;
             }
             
-            const submitBtn = document.getElementById('leaveSubmitText');
-            submitBtn.innerHTML = '<div class="loading"></div> جاري التسجيل...';
+            if (selectedEmployees.length === 0) {
+                showTemporaryMessage('يرجى اختيار موظف واحد على الأقل', 'error');
+                return;
+            }
             
-            const newLeave = {
-                employeeName,
-                stationName,
+            const saveBtn = document.querySelector('#employeesManagementSection .btn-success');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<div class="loading"></div> جاري الحفظ...';
+            
+            const existingList = customEmployeeLists.find(list => 
+                list.supervisorId === currentSupervisor.id && list.stationName === stationName
+            );
+            
+            const newListData = {
                 supervisorId: currentSupervisor.id,
                 supervisorName: currentSupervisor.employeeName,
-                type,
-                start,
-                end,
-                notes: notes || '',
+                stationName,
+                employees: selectedEmployees,
                 timestamp: new Date().toISOString()
             };
             
-            addData('leaves', newLeave)
-                .then(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
-                    document.getElementById('leaveForm').reset();
-                    document.getElementById('leaveStart').value = getTodayDate();
-                    document.getElementById('leaveEnd').value = getTodayDate();
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل الإجازة';
-                    }, 2000);
-                    
-                    document.getElementById('activeLeavesList').innerHTML = displayActiveLeaves();
-                    showTemporaryMessage('تم تسجيل الإجازة بنجاح', 'success');
-                })
-                .catch(error => {
-                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> حدث خطأ';
-                    console.error(error);
-                    showTemporaryMessage('حدث خطأ في التسجيل', 'error');
-                });
-        }
-
-        function displayActiveLeaves() {
-            const today = getTodayDate();
-            const activeLeaves = leaves
-                .filter(l => l.end >= today && l.supervisorId === currentSupervisor.id)
-                .sort((a, b) => new Date(a.start) - new Date(b.start));
+            let promise;
             
-            if (activeLeaves.length === 0) {
-                return '<div class="empty-state"><i class="fas fa-calendar-check"></i>لا توجد إجازات نشطة</div>';
+            if (existingList) {
+                promise = updateData('customEmployeeLists', existingList.id, newListData);
+            } else {
+                promise = addData('customEmployeeLists', newListData);
+            }
+            
+            promise.then(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> تم الحفظ بنجاح';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                }, 2000);
+                
+                document.getElementById('customListsContainer').innerHTML = displayCustomLists();
+                
+                showTemporaryMessage(`تم حفظ قائمة محطة ${stationName} بنجاح`, 'success');
+            }).catch(error => {
+                saveBtn.innerHTML = originalText;
+                console.error(error);
+                showTemporaryMessage('حدث خطأ في الحفظ', 'error');
+            });
+        };
+
+        function displayCustomLists() {
+            const lists = getCustomListsForCurrentSupervisor();
+            
+            if (lists.length === 0) {
+                return '<div class="empty-state"><i class="fas fa-list"></i>لم تقم بإنشاء أي قائمة مخصصة بعد</div>';
             }
             
             let html = '';
-            activeLeaves.forEach(leave => {
+            lists.forEach(list => {
                 html += `
-                    <div class="list-item">
-                        <div class="item-info">
-                            <div class="item-title">${leave.employeeName}</div>
-                            <div class="item-subtitle">
-                                <span class="station-badge">${leave.stationName}</span>
-                                <span>${leave.type}</span>
+                    <div class="card" style="margin-bottom: 10px;">
+                        <div class="card-header" style="padding: 8px 12px; font-size: 0.9rem;">
+                            <span><i class="fas fa-building"></i> ${list.stationName}</span>
+                            <button class="remove-btn" onclick="deleteCustomList('${list.id}')" style="width: auto; padding: 5px 10px; background: rgba(255,255,255,0.2); border: none; border-radius: 20px;">
+                                <i class="fas fa-trash-alt"></i> حذف
+                            </button>
+                        </div>
+                        <div class="card-body" style="padding: 10px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                ${list.employees.map(emp => `
+                                    <span style="background: var(--light); padding: 3px 10px; border-radius: 15px; font-size: 0.75rem; border: 1px solid var(--gray-light);">
+                                        ⭐ ${emp}
+                                    </span>
+                                `).join('')}
                             </div>
-                            <div class="item-subtitle">
-                                <i class="fas fa-calendar"></i> من ${leave.start} إلى ${leave.end}
+                            <div style="margin-top: 8px; font-size: 0.7rem; color: var(--gray);">
+                                آخر تحديث: ${new Date(list.timestamp).toLocaleDateString('ar-EG')}
                             </div>
                         </div>
                     </div>
                 `;
             });
+            
             return html;
         }
 
-        // ==================== صفحة تسجيل الأعطال ====================
+        window.deleteCustomList = function(id) {
+            if (confirm('هل أنت متأكد من حذف هذه القائمة؟')) {
+                deleteData('customEmployeeLists', id)
+                    .then(() => {
+                        document.getElementById('customListsContainer').innerHTML = displayCustomLists();
+                        showTemporaryMessage('تم حذف القائمة بنجاح', 'success');
+                    })
+                    .catch(error => {
+                        console.error('خطأ في حذف القائمة:', error);
+                        showTemporaryMessage('حدث خطأ في الحذف', 'error');
+                    });
+            }
+        };
+
+        // ==================== باقي الصفحات (faults, financial, cash) ====================
         function showFaultsPage() {
             const today = getTodayDate();
             
@@ -2327,7 +2975,7 @@
                                 <label><i class="fas fa-building"></i> المحطة</label>
                                 <select id="faultStation" required>
                                     <option value="">اختر المحطة</option>
-                                    ${getStationsOptions()}
+                                    ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
                                 </select>
                             </div>
                             
@@ -2423,14 +3071,9 @@
                 .then(() => {
                     submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح';
                     
-                    // إرسال إشعار واتساب للمدير العام
-                    const notificationSent = sendFaultNotificationToManager(newFault);
+                    sendFaultNotificationToManager(newFault);
                     
-                    if (notificationSent) {
-                        showTemporaryMessage('تم تسجيل العطل وإرسال إشعار للمدير العام', 'success');
-                    } else {
-                        showTemporaryMessage('تم تسجيل العطل ولكن فشل إرسال الإشعار', 'warning');
-                    }
+                    showTemporaryMessage('تم تسجيل العطل وإرسال إشعار للمدير العام', 'success');
                     
                     document.getElementById('faultForm').reset();
                     document.getElementById('faultDate').value = getTodayDate();
@@ -2490,7 +3133,6 @@
             return html;
         }
 
-        // ==================== صفحة السلف والمكافآت ====================
         function showFinancialPage() {
             const today = getTodayDate();
             
@@ -2513,7 +3155,7 @@
                                 <label><i class="fas fa-building"></i> المحطة</label>
                                 <select id="financialStation" required>
                                     <option value="">اختر المحطة</option>
-                                    ${getStationsOptions()}
+                                    ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
                                 </select>
                             </div>
                             
@@ -2570,6 +3212,17 @@
             document.getElementById('filterFinancialDate').addEventListener('change', function() {
                 document.getElementById('financialList').innerHTML = displayMyFinancials(this.value);
             });
+        }
+
+        function getEmployeesOptions() {
+            const activeEmployees = employees.filter(emp => emp.active);
+            if (activeEmployees.length === 0) {
+                return '<option value="" disabled>لا يوجد موظفين نشطين</option>';
+            }
+            
+            return activeEmployees.map(emp => 
+                `<option value="${emp.name}">${emp.name}</option>`
+            ).join('');
         }
 
         function recordFinancial(e) {
@@ -2660,7 +3313,6 @@
             return html;
         }
 
-        // ==================== صفحة إدارة العهدة (معدلة - بدون ديون) ====================
         function showCashPage() {
             const today = getTodayDate();
             const balance = calculateCashBalance();
@@ -2698,7 +3350,7 @@
                                     <label><i class="fas fa-building"></i> المحطة (اختياري)</label>
                                     <select id="cashStation">
                                         <option value="">اختر المحطة (اختياري)</option>
-                                        ${getStationsOptions()}
+                                        ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
                                     </select>
                                 </div>
                                 
@@ -2734,7 +3386,7 @@
                                     <label><i class="fas fa-building"></i> المحطة (اختياري)</label>
                                     <select id="cashWithdrawalStation">
                                         <option value="">اختر المحطة (اختياري)</option>
-                                        ${getStationsOptions()}
+                                        ${stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
                                     </select>
                                 </div>
                                 
@@ -2820,7 +3472,6 @@
                 document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
             });
             
-            // تفعيل التبويبات
             document.querySelectorAll('.cash-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.cash-tab').forEach(t => t.classList.remove('active'));
@@ -2833,7 +3484,6 @@
             });
         }
 
-        // تسجيل إيداع
         function recordCashDeposit(e) {
             e.preventDefault();
             
@@ -2882,10 +3532,7 @@
                     const filterType = document.getElementById('filterCashType').value;
                     document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
                     
-                    // تحديث الصفحة
-                    if (document.querySelector('.cash-summary')) {
-                        showCashPage();
-                    }
+                    showCashPage();
                     
                     showTemporaryMessage('تم تسجيل الإيداع بنجاح', 'success');
                 })
@@ -2896,7 +3543,6 @@
                 });
         }
 
-        // تسجيل صرف (يسمح بالسحب حتى مع رصيد غير كافٍ)
         function recordCashWithdrawal(e) {
             e.preventDefault();
             
@@ -2952,13 +3598,9 @@
                     const filterType = document.getElementById('filterCashType').value;
                     document.getElementById('cashTransactionsList').innerHTML = displayCashTransactions(filterDate, filterType);
                     
-                    // تحديث الصفحة
-                    if (document.querySelector('.cash-summary')) {
-                        showCashPage();
-                    }
+                    showCashPage();
                     
-                    // تحذير إذا أصبح الرصيد سالباً
-                    const newBalance = calculateCashBalance() - amount;
+                    const newBalance = calculateCashBalance();
                     if (newBalance < 0) {
                         showTemporaryMessage('تم التسجيل بنجاح - الرصيد أصبح سالباً', 'warning');
                     } else {
@@ -2972,7 +3614,6 @@
                 });
         }
 
-        // عرض حركات العهدة
         function displayCashTransactions(dateFilter = '', typeFilter = '') {
             let filtered = cashTransactions
                 .filter(c => c.supervisorId === currentSupervisor.id)
@@ -3020,7 +3661,6 @@
             return html;
         }
 
-        // عرض رسالة مؤقتة
         function showTemporaryMessage(message, type = 'success') {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
@@ -3049,7 +3689,6 @@
             }, 3000);
         }
 
-        // إضافة تأثير fadeOut
         const fadeStyle = document.createElement('style');
         fadeStyle.textContent = `
             @keyframes fadeOut {
