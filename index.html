@@ -253,6 +253,12 @@
             background: white;
         }
 
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
         button {
             width: 100%;
             padding: 16px;
@@ -1164,6 +1170,25 @@
             font-weight: 600;
             color: var(--primary);
         }
+        
+        /* تنسيق للتواريخ غير القابلة للتعديل */
+        .date-disabled {
+            opacity: 0.7;
+            background-color: #f0f0f0;
+        }
+        
+        .date-warning {
+            font-size: 0.8rem;
+            color: var(--warning);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .date-warning i {
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -1410,6 +1435,69 @@
                 list.supervisorId === currentSupervisor.id && list.stationName === stationName
             );
             return stationList ? stationList.employees : [];
+        }
+
+        // ==================== دوال التحقق من التاريخ ====================
+        
+        function validateDate(date) {
+            const today = getTodayDate();
+            return date === today;
+        }
+
+        function isDateInPast(date) {
+            const today = getTodayDate();
+            return date < today;
+        }
+
+        function isDateInFuture(date) {
+            const today = getTodayDate();
+            return date > today;
+        }
+
+        function setupDateInput(inputId, setToday = true) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            
+            const today = getTodayDate();
+            
+            // تعيين القيمة إلى تاريخ اليوم إذا كان مطلوباً
+            if (setToday) {
+                input.value = today;
+            }
+            
+            // تعيين الخاصية min إلى تاريخ اليوم لمنع اختيار تواريخ قديمة
+            input.setAttribute('min', today);
+            
+            // إذا كان التاريخ الحالي ليس اليوم، نجعله للقراءة فقط
+            if (input.value && input.value !== today) {
+                input.setAttribute('readonly', true);
+                input.classList.add('date-disabled');
+                
+                // إضافة تحذير
+                const parent = input.parentElement;
+                if (!parent.querySelector('.date-warning')) {
+                    const warning = document.createElement('div');
+                    warning.className = 'date-warning';
+                    warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> لا يمكن تعديل التواريخ القديمة';
+                    parent.appendChild(warning);
+                }
+            } else {
+                input.removeAttribute('readonly');
+                input.classList.remove('date-disabled');
+                
+                // إزالة التحذير إذا كان موجوداً
+                const warning = input.parentElement.querySelector('.date-warning');
+                if (warning) warning.remove();
+            }
+        }
+
+        function validateDateBeforeSubmit(date) {
+            const today = getTodayDate();
+            if (date !== today) {
+                showTemporaryMessage('لا يمكن تسجيل بيانات بتواريخ غير اليوم الحالي', 'error');
+                return false;
+            }
+            return true;
         }
 
         // ==================== دوال التحديث ====================
@@ -2000,6 +2088,8 @@
                 const field = document.getElementById(fieldId);
                 if (field && field.value !== today && field.type === 'date') {
                     field.value = today;
+                    // إعادة تطبيق إعدادات التحقق من التاريخ
+                    setupDateInput(fieldId, false);
                 }
             });
         }
@@ -2357,6 +2447,9 @@
                 </div>
             `;
             
+            // تطبيق التحقق من التاريخ
+            setupDateInput('attendanceDate');
+            
             // تحديث قائمة الموظفين للتسجيل المفرد
             updateSingleEmployeeSelect();
         }
@@ -2418,7 +2511,7 @@
             }
         };
 
-        // ==================== دالة تسجيل الحضور المفرد (معدلة للتوافق مع تطبيق الإدارة) ====================
+        // ==================== دالة تسجيل الحضور المفرد (معدلة للتحقق من التاريخ) ====================
         window.saveSingleAttendance = function() {
             const date = document.getElementById('attendanceDate').value;
             const employeeName = document.getElementById('singleEmployeeSelect').value;
@@ -2435,6 +2528,12 @@
             
             if (!employeeName) {
                 showTemporaryMessage('يرجى اختيار الموظف', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل الحضور إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
@@ -2715,7 +2814,7 @@
             }
         };
 
-        // ==================== دالة تسجيل الحضور بالجملة (معدلة للتوافق مع تطبيق الإدارة) ====================
+        // ==================== دالة تسجيل الحضور بالجملة (معدلة للتحقق من التاريخ) ====================
         window.saveBulkAttendance = function(type) {
             const date = document.getElementById('attendanceDate').value;
             
@@ -2726,6 +2825,12 @@
             
             if (!selectedStation) {
                 showTemporaryMessage('يرجى اختيار المحطة أولاً', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل الحضور إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
@@ -3187,6 +3292,9 @@
                 </div>
             `;
             
+            // تطبيق التحقق من التاريخ
+            setupDateInput('faultDate');
+            
             document.getElementById('faultForm').addEventListener('submit', recordFault);
             document.getElementById('filterFaultStatus').addEventListener('change', function() {
                 document.getElementById('faultsList').innerHTML = displayMyFaults(this.value);
@@ -3204,6 +3312,12 @@
             
             if (!stationName || !title || !description || !date || !status) {
                 showTemporaryMessage('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل الأعطال إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
@@ -3367,6 +3481,10 @@
                 </div>
             `;
             
+            // تطبيق التحقق من التاريخ
+            setupDateInput('financialDate');
+            setupDateInput('filterFinancialDate', false);
+            
             document.getElementById('financialForm').addEventListener('submit', recordFinancial);
             document.getElementById('filterFinancialDate').addEventListener('change', function() {
                 document.getElementById('financialList').innerHTML = displayMyFinancials(this.value);
@@ -3401,6 +3519,12 @@
             
             if (amount <= 0) {
                 showTemporaryMessage('يرجى إدخال مبلغ صحيح أكبر من صفر', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل الحركات المالية إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
@@ -3623,6 +3747,11 @@
                 </div>
             `;
             
+            // تطبيق التحقق من التاريخ
+            setupDateInput('cashDate');
+            setupDateInput('cashWithdrawalDate');
+            setupDateInput('filterCashDate', false);
+            
             document.getElementById('cashDepositForm').addEventListener('submit', recordCashDeposit);
             document.getElementById('cashWithdrawalForm').addEventListener('submit', recordCashWithdrawal);
             document.getElementById('filterCashBtn').addEventListener('click', function() {
@@ -3664,6 +3793,12 @@
             
             if (!reason) {
                 showTemporaryMessage('يرجى إدخال سبب الإيداع', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل الإيداعات إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
@@ -3732,6 +3867,12 @@
             
             if (!recipient) {
                 showTemporaryMessage('يرجى إدخال اسم المستلم', 'error');
+                return;
+            }
+            
+            // التحقق من أن التاريخ هو اليوم فقط
+            if (!validateDate(date)) {
+                showTemporaryMessage('لا يمكن تسجيل المصروفات إلا بتاريخ اليوم الحالي فقط', 'error');
                 return;
             }
             
